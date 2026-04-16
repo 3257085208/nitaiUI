@@ -3,206 +3,349 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>聶.NET - 个人主页</title>
+    <title>聶.NET - 拟态主页</title>
     <style>
-        /* 引入极客风格等宽字体 */
-        @font-face {
-            font-family: 'Termius';
-            /* 如果本地有字体文件可在此引入 src: url('path/to/termius.woff'); */
+        :root {
+            /* 拟态核心色：暖灰底色，比纯灰/纯白更能凸显光影厚度 */
+            --bg-color: #e0e5ec;
+            --text-main: #2d3748;
+            --text-sub: #718096;
+            
+            /* 阴影变量：高光与暗部，调节透明度实现柔和过渡 */
+            --shadow-dark: rgba(163, 177, 198, 0.7);
+            --shadow-light: rgba(255, 255, 255, 0.9);
+            
+            /* 强调色：极客蓝 */
+            --primary: #4e80ee;
         }
 
-        :root {
-            --bg-color: #e0e5ec;
-            --shadow-light: #ffffff;
-            --shadow-dark: #a3b1c6;
-            --text-main: #333333;
-            --text-sub: #666666;
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            /* 赋予所有交互平滑的物理过渡感 */
+            transition: all 0.35s cubic-bezier(0.25, 0.8, 0.25, 1);
         }
 
         body {
             background-color: var(--bg-color);
             color: var(--text-main);
-            font-family: 'Termius', 'Consolas', 'Courier New', monospace;
+            font-family: 'Consolas', 'PingFang SC', 'Microsoft YaHei', sans-serif;
             display: flex;
             justify-content: center;
             align-items: center;
             min-height: 100vh;
-            margin: 0;
-            padding: 20px;
-            box-sizing: border-box;
+            overflow: hidden;
         }
 
-        /* 核心拟态外框 */
-        .container {
-            width: 100%;
-            max-width: 700px;
-            padding: 50px 40px;
-            border-radius: 24px;
+        /* 1. 主容器：悬浮呼吸动画 */
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-12px); }
+            100% { transform: translateY(0px); }
+        }
+
+        .neumorphic-card {
+            width: 850px;
+            min-height: 480px;
+            border-radius: 35px;
             background: var(--bg-color);
-            box-shadow: 12px 12px 24px rgba(163, 177, 198, 0.6), 
-                        -12px -12px 24px rgba(255, 255, 255, 0.7);
-            text-align: center;
-            transition: all 0.3s ease;
+            /* 多层阴影缔造厚重感 */
+            box-shadow: 20px 20px 40px var(--shadow-dark),
+                       -20px -20px 40px var(--shadow-light);
+            padding: 50px;
+            display: flex;
+            gap: 50px;
+            animation: float 6s ease-in-out infinite;
+            position: relative;
         }
 
-        /* 头像/Logo - 凸起效果 */
-        .avatar {
-            width: 110px;
-            height: 110px;
-            margin: 0 auto 20px;
+        /* 2. 左侧：个人轮廓与头像 */
+        .profile-section {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+        }
+
+        /* 头像外圈：旋转虚线动画 */
+        .avatar-container {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            padding: 8px;
+            background: var(--bg-color);
+            box-shadow: 10px 10px 20px var(--shadow-dark),
+                       -10px -10px 20px var(--shadow-light);
+            margin-bottom: 25px;
+            position: relative;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .avatar-container::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            border-radius: 50%;
+            border: 2px dashed var(--primary);
+            animation: spin 12s linear infinite;
+            opacity: 0.4;
+        }
+
+        @keyframes spin {
+            100% { transform: rotate(360deg); }
+        }
+
+        /* 头像本体：内凹质感 */
+        .avatar-inner {
+            width: 100%;
+            height: 100%;
             border-radius: 50%;
             background: var(--bg-color);
-            box-shadow: 7px 7px 14px rgba(163, 177, 198, 0.6), 
-                       -7px -7px 14px rgba(255, 255, 255, 0.7);
+            box-shadow: inset 6px 6px 12px var(--shadow-dark),
+                       inset -6px -6px 12px var(--shadow-light);
             display: flex;
             justify-content: center;
             align-items: center;
-            font-size: 42px;
+            font-size: 50px;
             font-weight: bold;
+            color: var(--primary);
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .name {
+            font-size: 26px;
+            font-weight: 800;
+            letter-spacing: 2px;
+            margin-bottom: 12px;
             color: var(--text-main);
         }
 
-        .title {
-            margin: 10px 0 5px;
-            font-size: 26px;
-            letter-spacing: 2px;
-        }
-
-        .subtitle {
-            font-size: 14px;
-            color: var(--text-sub);
-            margin-bottom: 40px;
-        }
-
-        /* 技能/信息卡片网格 */
-        .card-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 25px;
-            margin-bottom: 40px;
-        }
-
-        /* 卡片 - 凹陷（内阴影）效果 */
-        .card {
-            padding: 25px 20px;
-            border-radius: 16px;
-            background: var(--bg-color);
-            box-shadow: inset 6px 6px 12px rgba(163, 177, 198, 0.5), 
-                        inset -6px -6px 12px rgba(255, 255, 255, 0.8);
-            text-align: left;
-        }
-
-        .card h3 {
-            margin-top: 0;
-            font-size: 16px;
-            border-bottom: 1px dashed #ccc;
-            padding-bottom: 8px;
-            margin-bottom: 15px;
-        }
-
-        .card p {
+        .bio {
             font-size: 13px;
             color: var(--text-sub);
-            margin: 8px 0;
+            line-height: 1.8;
+            margin-bottom: 35px;
+        }
+
+        /* 快捷操作按钮组 */
+        .btn-group {
+            display: flex;
+            gap: 20px;
+        }
+
+        .icon-btn {
+            width: 55px;
+            height: 55px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            text-decoration: none;
+            color: var(--text-sub);
+            font-weight: bold;
+            font-size: 14px;
+            background: linear-gradient(145deg, #e0e5ec, #f1f5fa);
+            box-shadow: 7px 7px 14px var(--shadow-dark),
+                       -7px -7px 14px var(--shadow-light);
+        }
+
+        .icon-btn:hover {
+            color: var(--primary);
+            transform: translateY(-4px);
+            box-shadow: 10px 10px 20px var(--shadow-dark),
+                       -10px -10px 20px var(--shadow-light);
+        }
+
+        /* 按下时丝滑转为内阴影 */
+        .icon-btn:active {
+            transform: translateY(0);
+            box-shadow: inset 5px 5px 10px var(--shadow-dark),
+                       inset -5px -5px 10px var(--shadow-light);
+        }
+
+        /* 3. 右侧：内容与数据大屏 */
+        .content-section {
+            flex: 1.4;
+            display: flex;
+            flex-direction: column;
+            gap: 30px;
+        }
+
+        /* 数据面板：强内凹感 */
+        .inset-panel {
+            background: var(--bg-color);
+            border-radius: 24px;
+            padding: 30px;
+            box-shadow: inset 8px 8px 16px var(--shadow-dark),
+                       inset -8px -8px 16px var(--shadow-light);
+        }
+
+        .panel-title {
+            font-size: 16px;
+            font-weight: bold;
+            color: var(--text-main);
+            margin-bottom: 20px;
             display: flex;
             align-items: center;
         }
 
-        .card p::before {
-            content: '>';
-            margin-right: 8px;
-            color: #888;
-            font-weight: bold;
+        .panel-title::before {
+            content: '';
+            display: block;
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: var(--primary);
+            margin-right: 12px;
+            box-shadow: 0 0 10px var(--primary);
         }
 
-        /* 交互按钮区域 */
-        .actions {
+        /* 进度条动画与扫光（Shimmer）效果 */
+        .skill-item {
+            margin-bottom: 18px;
+        }
+
+        .skill-info {
             display: flex;
-            justify-content: center;
-            gap: 25px;
-            flex-wrap: wrap;
+            justify-content: space-between;
+            font-size: 13px;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: var(--text-sub);
         }
 
-        /* 拟态按钮 - 默认外凸，Hover时内凹 */
-        .neo-btn {
-            padding: 14px 35px;
+        .progress-bar-bg {
+            height: 12px;
             border-radius: 12px;
             background: var(--bg-color);
-            box-shadow: 6px 6px 12px rgba(163, 177, 198, 0.6), 
-                       -6px -6px 12px rgba(255, 255, 255, 0.7);
-            color: var(--text-main);
+            box-shadow: inset 4px 4px 8px var(--shadow-dark),
+                       inset -4px -4px 8px var(--shadow-light);
+            overflow: hidden;
+            position: relative;
+        }
+
+        .progress-bar-fill {
+            height: 100%;
+            border-radius: 12px;
+            background: var(--primary);
+            position: relative;
+            /* 初始宽度设为0，通过JS实现加载动画 */
+            width: 0;
+            transition: width 1.5s cubic-bezier(0.1, 0.5, 0.2, 1);
+        }
+
+        /* 扫光动效 */
+        .progress-bar-fill::after {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; bottom: 0; right: 0;
+            background: linear-gradient(90deg, rgba(255,255,255,0) 0%, rgba(255,255,255,0.4) 50%, rgba(255,255,255,0) 100%);
+            animation: shimmer 2.5s infinite;
+        }
+
+        @keyframes shimmer {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+
+        /* 底部宽按钮 */
+        .block-btn {
+            display: block;
+            text-align: center;
+            padding: 18px;
+            border-radius: 18px;
             text-decoration: none;
+            color: var(--primary);
             font-weight: bold;
             font-size: 15px;
-            transition: all 0.2s ease-in-out;
-            cursor: pointer;
-            border: none;
-            outline: none;
+            letter-spacing: 2px;
+            background: var(--bg-color);
+            box-shadow: 8px 8px 16px var(--shadow-dark),
+                       -8px -8px 16px var(--shadow-light);
         }
 
-        .neo-btn:hover, .neo-btn:active {
-            box-shadow: inset 4px 4px 8px rgba(163, 177, 198, 0.6), 
-                        inset -4px -4px 8px rgba(255, 255, 255, 0.7);
-            color: #000;
+        .block-btn:hover {
+            box-shadow: inset 6px 6px 12px var(--shadow-dark),
+                       inset -6px -6px 12px var(--shadow-light);
+            transform: scale(0.98);
         }
 
-        /* 响应式设计 */
-        @media (max-width: 600px) {
-            .card-grid {
-                grid-template-columns: 1fr;
-            }
-            .container {
-                padding: 30px 20px;
-            }
-        }
     </style>
 </head>
 <body>
 
-    <div class="container">
-        <div class="avatar">
-            <span>聶</span>
-        </div>
-        
-        <h1 class="title">聶.NET</h1>
-        <p class="subtitle">System Administrator & Developer</p>
-
-        <div class="card-grid">
-            <div class="card">
-                <h3>[Infrastructure]</h3>
-                <p>Dell R620 & Supermicro Mgt</p>
-                <p>Proxmox VE Virtualization</p>
-                <p>IDC Network Configuration</p>
+    <div class="neumorphic-card">
+        <div class="profile-section">
+            <div class="avatar-container">
+                <div class="avatar-inner">聶</div>
             </div>
-            <div class="card">
-                <h3>[Stack & Dev]</h3>
-                <p>Debian / RedHat Linux</p>
-                <p>Telegram Bot Automation</p>
-                <p>Blog System Development</p>
+            <h1 class="name">聶.NET</h1>
+            <p class="bio">
+                Fujian / Server Administrator<br>
+                IDC System & Virtualization
+            </p>
+            
+            <div class="btn-group">
+                <a href="https://blog.i8-mc.cn" class="icon-btn" title="Blog">B</a>
+                <a href="#" class="icon-btn" title="Telegram Bot">T</a>
+                <a href="#" class="icon-btn" title="Email">E</a>
             </div>
         </div>
 
-        <div class="actions">
-            <a href="https://blog.i8-mc.cn" class="neo-btn">访问博客</a>
-            <a href="#" class="neo-btn">系统状态</a>
-            <a href="#" class="neo-btn">关于我</a>
+        <div class="content-section">
+            <div class="inset-panel">
+                <div class="panel-title">Infrastructure Stack</div>
+                
+                <div class="skill-item">
+                    <div class="skill-info">
+                        <span>Debian / RedHat Linux</span>
+                        <span>95%</span>
+                    </div>
+                    <div class="progress-bar-bg">
+                        <div class="progress-bar-fill" data-width="95%"></div>
+                    </div>
+                </div>
+
+                <div class="skill-item">
+                    <div class="skill-info">
+                        <span>Proxmox VE (Dell/Supermicro)</span>
+                        <span>90%</span>
+                    </div>
+                    <div class="progress-bar-bg">
+                        <div class="progress-bar-fill" data-width="90%"></div>
+                    </div>
+                </div>
+
+                <div class="skill-item">
+                    <div class="skill-info">
+                        <span>TG Bot Automation</span>
+                        <span>80%</span>
+                    </div>
+                    <div class="progress-bar-bg">
+                        <div class="progress-bar-fill" data-width="80%"></div>
+                    </div>
+                </div>
+            </div>
+
+            <a href="https://blog.i8-mc.cn" class="block-btn">ENTER SYSTEM</a>
         </div>
     </div>
 
     <script>
-        // 预留的微妙动画或交互脚本位置
-        // 比如可以添加一个点击按钮触发音效或微小形变的代码
-        document.querySelectorAll('.neo-btn').forEach(btn => {
-            btn.addEventListener('mousedown', function() {
-                this.style.transform = 'scale(0.97)';
-            });
-            btn.addEventListener('mouseup', function() {
-                this.style.transform = 'scale(1)';
-            });
-            btn.addEventListener('mouseleave', function() {
-                this.style.transform = 'scale(1)';
-            });
-        });
+        // 页面加载完毕后，触发进度条生长动画，提升视觉质感
+        window.onload = () => {
+            setTimeout(() => {
+                document.querySelectorAll('.progress-bar-fill').forEach(bar => {
+                    const targetWidth = bar.getAttribute('data-width');
+                    bar.style.width = targetWidth;
+                });
+            }, 300); // 略微延迟让进入页面的动画更自然
+        };
     </script>
 </body>
 </html>
