@@ -3,30 +3,30 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>聂凯翔 - 个人数据中心</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800;900&display=swap" rel="stylesheet">
+    <title>聂凯翔 - 个人终端系统</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;900&display=swap" rel="stylesheet">
     <style>
-        /* 核心深浅色变量 */
+        /* ====== 核心变量与深浅色模式系统 ====== */
         :root {
             --bg-color: #eef0f5;
             --text-main: #2d3748;
             --text-sub: #718096;
-            --shadow-dark: #c8d0e7;
-            --shadow-light: #ffffff;
+            --shadow-dark: rgba(180, 190, 205, 0.6);
+            --shadow-light: rgba(255, 255, 255, 1);
             --primary: #4a8bdc;
             --primary-hover: #3572bf;
-            --card-radius: 28px;
-            --btn-radius: 18px;
+            --terminal-bg: #e6e9f0;
         }
 
         [data-theme="dark"] {
-            --bg-color: #161925;
-            --text-main: #f1f5f9;
+            --bg-color: #1a1e29;
+            --text-main: #f8fafc;
             --text-sub: #94a3b8;
-            --shadow-dark: #0d0f17;
-            --shadow-light: #1f2333;
-            --primary: #3b82f6;
-            --primary-hover: #60a5fa;
+            --shadow-dark: rgba(12, 14, 20, 0.8);
+            --shadow-light: rgba(40, 45, 60, 0.6);
+            --primary: #60a5fa;
+            --primary-hover: #3b82f6;
+            --terminal-bg: #151822;
         }
 
         * {
@@ -34,7 +34,7 @@
             margin: 0;
             padding: 0;
             -webkit-font-smoothing: antialiased;
-            text-rendering: optimizeLegibility;
+            -moz-osx-font-smoothing: grayscale;
         }
 
         html { scroll-behavior: smooth; }
@@ -42,161 +42,303 @@
         body {
             background-color: var(--bg-color);
             color: var(--text-main);
-            font-family: 'Inter', -apple-system, 'PingFang SC', 'Microsoft YaHei', sans-serif;
+            /* 中文调用苹果/微软雅黑顶级渲染，英文走Inter */
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', sans-serif;
             transition: background-color 0.5s ease, color 0.5s ease;
             overflow-x: hidden;
             line-height: 1.6;
         }
 
-        /* ====== 导航与工具栏 ====== */
+        /* ====== 导航侧边栏 ====== */
         .sidebar {
             position: fixed;
             top: 0; left: 0;
-            width: 260px; height: 100vh;
-            padding: 40px 30px;
-            display: flex; flex-direction: column;
+            width: 280px;
+            height: 100vh;
+            padding: 50px 30px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
             z-index: 100;
         }
 
         .avatar-wrap {
-            width: 100px; height: 100px;
+            width: 100px;
+            height: 100px;
             border-radius: 50%;
             background: var(--bg-color);
-            box-shadow: 10px 10px 20px var(--shadow-dark),
-                       -10px -10px 20px var(--shadow-light);
-            padding: 6px; margin-bottom: 40px;
-            transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+            box-shadow: 8px 8px 16px var(--shadow-dark),
+                       -8px -8px 16px var(--shadow-light);
+            padding: 6px;
+            margin-bottom: 20px;
+            transition: all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
         }
-        .avatar-wrap img { width: 100%; height: 100%; border-radius: 50%; object-fit: cover; }
-        .avatar-wrap:hover { transform: scale(1.08) rotate(5deg); }
 
-        .nav-links { display: flex; flex-direction: column; gap: 18px; flex-grow: 1; }
-        
-        .nav-item {
-            text-decoration: none; color: var(--text-sub);
-            font-weight: 700; font-size: 15px; padding: 14px 20px;
-            border-radius: var(--btn-radius);
-            transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
-            display: flex; align-items: center; gap: 10px;
+        .avatar-wrap img {
+            width: 100%; height: 100%;
+            border-radius: 50%; object-fit: cover;
         }
+
+        .nav-links {
+            display: flex;
+            flex-direction: column;
+            gap: 18px;
+        }
+
+        .nav-item {
+            text-decoration: none;
+            color: var(--text-sub);
+            font-weight: 700;
+            font-size: 15px;
+            padding: 16px 20px;
+            border-radius: 16px;
+            transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+            display: flex; align-items: center;
+        }
+
         .nav-item::before {
-            content: ''; width: 8px; height: 8px; border-radius: 50%; background: var(--text-sub); opacity: 0.3; transition: 0.3s;
+            content: ''; display: inline-block;
+            width: 6px; height: 6px; border-radius: 50%;
+            background: transparent; margin-right: 12px;
+            transition: all 0.3s;
         }
 
         .nav-item:hover, .nav-item.active {
-            color: var(--primary); background: var(--bg-color);
-            box-shadow: 6px 6px 12px var(--shadow-dark), -6px -6px 12px var(--shadow-light);
-            transform: translateX(8px);
+            color: var(--primary);
+            background: var(--bg-color);
+            box-shadow: 6px 6px 12px var(--shadow-dark),
+                       -6px -6px 12px var(--shadow-light);
+            transform: translateX(10px);
         }
-        .nav-item.active::before { background: var(--primary); opacity: 1; box-shadow: 0 0 8px var(--primary); }
+
+        .nav-item:hover::before, .nav-item.active::before {
+            background: var(--primary);
+            box-shadow: 0 0 8px var(--primary);
+        }
+
+        .nav-item:active {
+            box-shadow: inset 4px 4px 8px var(--shadow-dark),
+                       inset -4px -4px 8px var(--shadow-light);
+            transform: translateX(5px);
+        }
 
         .theme-toggle {
-            width: 50px; height: 50px; border-radius: 50%;
-            background: var(--bg-color); cursor: pointer;
-            box-shadow: 6px 6px 12px var(--shadow-dark), -6px -6px 12px var(--shadow-light);
-            display: flex; justify-content: center; align-items: center; font-size: 20px;
-            transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1); margin-top: auto;
+            width: 55px; height: 55px;
+            border-radius: 16px;
+            background: var(--bg-color);
+            box-shadow: 6px 6px 12px var(--shadow-dark),
+                       -6px -6px 12px var(--shadow-light);
+            display: flex; justify-content: center; align-items: center;
+            cursor: pointer; font-size: 20px;
+            transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
         }
-        .theme-toggle:active { box-shadow: inset 4px 4px 8px var(--shadow-dark), inset -4px -4px 8px var(--shadow-light); transform: scale(0.95); }
+        .theme-toggle:hover { transform: translateY(-5px); }
+        .theme-toggle:active { box-shadow: inset 4px 4px 8px var(--shadow-dark), inset -4px -4px 8px var(--shadow-light); transform: translateY(0); }
 
-        /* ====== 主内容区与 Bento 布局 ====== */
+        /* ====== 主内容区 ====== */
         .main-content {
-            margin-left: 260px; padding: 0 40px;
+            margin-left: 280px;
+            padding: 0 4% 80px 4%;
             max-width: 1400px;
         }
 
-        section { min-height: 100vh; padding: 60px 0; display: flex; flex-direction: column; justify-content: center; }
+        section {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            padding: 60px 0;
+        }
 
-        .section-title { font-size: 32px; font-weight: 900; margin-bottom: 30px; color: var(--text-main); display: flex; align-items: center; gap: 15px;}
-        .section-title::after { content: ''; flex-grow: 1; height: 2px; background: var(--shadow-dark); opacity: 0.3; border-radius: 2px; }
+        .section-title {
+            font-size: 32px;
+            font-weight: 900;
+            margin-bottom: 40px;
+            color: var(--text-main);
+            letter-spacing: 1px;
+            display: flex; align-items: center;
+        }
+        
+        .section-title::after {
+            content: ''; flex-grow: 1; height: 2px;
+            background: var(--shadow-dark); margin-left: 20px;
+            opacity: 0.2; border-radius: 2px;
+        }
 
-        /* 核心卡片样式 */
-        .neo-box {
-            background: var(--bg-color); border-radius: var(--card-radius); padding: 35px;
-            box-shadow: 12px 12px 24px var(--shadow-dark), -12px -12px 24px var(--shadow-light);
+        /* 基础拟态外凸卡片 */
+        .neo-card {
+            background: var(--bg-color);
+            border-radius: 28px;
+            padding: 40px;
+            box-shadow: 14px 14px 28px var(--shadow-dark),
+                       -14px -14px 28px var(--shadow-light);
             transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
-            height: 100%; display: flex; flex-direction: column;
+            position: relative;
         }
-        .neo-box:hover {
+
+        .neo-card:hover {
             transform: translateY(-6px);
-            box-shadow: 18px 18px 36px var(--shadow-dark), -16px -16px 32px var(--shadow-light);
+            box-shadow: 20px 20px 40px var(--shadow-dark),
+                       -15px -15px 30px var(--shadow-light);
         }
 
+        /* 基础拟态内凹容器 */
         .neo-inset {
-            background: var(--bg-color); border-radius: 20px; padding: 20px;
+            background: var(--bg-color);
+            border-radius: 20px;
+            padding: 25px;
+            box-shadow: inset 6px 6px 12px var(--shadow-dark),
+                       inset -6px -6px 12px var(--shadow-light);
+        }
+
+        /* ====== 第一屏：主页系统台 ====== */
+        .hero-grid {
+            display: grid;
+            grid-template-columns: 1.2fr 1fr;
+            gap: 40px;
+            align-items: center;
+        }
+
+        .hero-title { font-size: 46px; font-weight: 900; margin-bottom: 10px; }
+        .hero-subtitle { font-size: 18px; color: var(--primary); font-weight: 700; margin-bottom: 25px; }
+        
+        .hero-text { font-size: 15px; color: var(--text-sub); line-height: 2; margin-bottom: 35px; text-align: justify; }
+
+        /* 拟态代码终端 */
+        .terminal {
+            background: var(--terminal-bg);
+            border-radius: 20px;
+            padding: 20px;
+            box-shadow: inset 6px 6px 12px var(--shadow-dark),
+                       inset -6px -6px 12px var(--shadow-light);
+            font-family: 'Consolas', monospace;
+            font-size: 13px;
+            color: var(--text-sub);
+            line-height: 1.8;
+        }
+        .terminal span.green { color: #10b981; font-weight: bold;}
+        .terminal span.blue { color: var(--primary); font-weight: bold;}
+
+        /* 快捷统计面板 */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+        }
+        .stat-box {
+            text-align: center;
+            padding: 25px 15px;
+        }
+        .stat-num { font-size: 28px; font-weight: 900; color: var(--primary); margin-bottom: 5px; }
+        .stat-label { font-size: 13px; font-weight: 600; color: var(--text-sub); }
+
+        /* ====== 第二屏：履历档案 (时间轴与经历) ====== */
+        .resume-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+        }
+        
+        .timeline {
+            border-left: 2px dashed var(--primary);
+            padding-left: 25px;
+            margin-left: 15px;
+            display: flex; flex-direction: column; gap: 30px;
+        }
+        .timeline-item { position: relative; }
+        .timeline-item::before {
+            content: ''; position: absolute;
+            left: -33px; top: 0;
+            width: 14px; height: 14px; border-radius: 50%;
+            background: var(--primary);
+            box-shadow: 0 0 10px var(--primary);
+        }
+        .time-date { font-size: 12px; color: var(--primary); font-weight: 800; margin-bottom: 8px; }
+        .time-title { font-size: 18px; font-weight: 800; margin-bottom: 8px; color: var(--text-main); }
+        .time-desc { font-size: 14px; color: var(--text-sub); line-height: 1.8; }
+
+        /* ====== 第三屏：底层架构与技术栈 ====== */
+        .skills-container {
+            display: grid; grid-template-columns: 1fr 1.2fr; gap: 40px;
+        }
+        
+        .skill-item { margin-bottom: 25px; }
+        .skill-item:last-child { margin-bottom: 0; }
+        .skill-info { display: flex; justify-content: space-between; font-size: 14px; font-weight: 700; margin-bottom: 12px; }
+        .progress-bg {
+            height: 16px; border-radius: 16px; background: var(--bg-color);
+            box-shadow: inset 4px 4px 8px var(--shadow-dark), inset -4px -4px 8px var(--shadow-light); padding: 3px;
+        }
+        .progress-fill {
+            height: 100%; border-radius: 10px; background: var(--primary);
+            width: 0; transition: width 1.5s cubic-bezier(0.1, 0.5, 0.2, 1);
+        }
+
+        /* 标签矩阵 */
+        .tags-matrix { display: flex; flex-wrap: wrap; gap: 15px; }
+        .neo-tag {
+            padding: 10px 18px; border-radius: 12px; font-size: 13px; font-weight: 700;
+            color: var(--text-main); background: var(--bg-color);
+            box-shadow: 5px 5px 10px var(--shadow-dark), -5px -5px 10px var(--shadow-light);
+            transition: all 0.3s; cursor: default;
+        }
+        .neo-tag:hover {
+            color: var(--primary);
+            box-shadow: inset 3px 3px 6px var(--shadow-dark), inset -3px -3px 6px var(--shadow-light);
+        }
+
+        /* ====== 第四屏：核心部署项目 ====== */
+        .projects-grid {
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 35px;
+        }
+        .project-card {
+            display: flex; flex-direction: column; height: 100%;
+            text-decoration: none; padding: 35px;
+        }
+        .project-card:active {
             box-shadow: inset 6px 6px 12px var(--shadow-dark), inset -6px -6px 12px var(--shadow-light);
+            transform: scale(0.97);
         }
-
-        /* 按钮样式 */
-        .neo-btn {
-            background: var(--bg-color); color: var(--primary); font-weight: 800; font-size: 14px;
-            padding: 15px 30px; border-radius: var(--btn-radius); text-decoration: none; display: inline-block;
-            box-shadow: 8px 8px 16px var(--shadow-dark), -8px -8px 16px var(--shadow-light);
-            transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1); border: none; cursor: pointer; text-align: center;
+        .project-status {
+            font-size: 12px; font-weight: 800; padding: 5px 12px; border-radius: 8px;
+            width: max-content; margin-bottom: 15px;
         }
-        .neo-btn.primary { background: var(--primary); color: #fff; box-shadow: 8px 8px 16px rgba(74,139,220,0.3), -8px -8px 16px var(--shadow-light); }
-        .neo-btn:active { box-shadow: inset 5px 5px 10px rgba(0,0,0,0.15); transform: scale(0.96); }
-
-        /* Bento Grid 布局 */
-        .bento-grid { display: grid; grid-template-columns: repeat(12, 1fr); gap: 30px; }
-        .col-span-12 { grid-column: span 12; }
-        .col-span-8 { grid-column: span 8; }
-        .col-span-4 { grid-column: span 4; }
-        .col-span-6 { grid-column: span 6; }
-
-        /* ====== 第一屏：主控制台 ====== */
-        .hero-title { font-size: 52px; font-weight: 900; margin-bottom: 10px; line-height: 1.1; letter-spacing: 2px;}
-        .hero-role { font-size: 18px; color: var(--primary); font-weight: 700; margin-bottom: 25px; }
-        .hero-desc { font-size: 15px; color: var(--text-sub); margin-bottom: 30px; max-width: 90%; }
+        .status-run { background: rgba(16, 185, 129, 0.15); color: #10b981; }
+        .status-dev { background: rgba(74, 139, 220, 0.15); color: var(--primary); }
+        .status-plan { background: rgba(245, 158, 11, 0.15); color: #f59e0b; }
         
-        /* 终端面板样式 */
-        .terminal-panel { background: #1a1e29; color: #a9b7c6; border-radius: 20px; padding: 25px; font-family: 'Consolas', monospace; font-size: 13px; box-shadow: inset 5px 5px 15px rgba(0,0,0,0.5); }
-        .term-header { display: flex; gap: 8px; margin-bottom: 15px; }
-        .term-dot { width: 12px; height: 12px; border-radius: 50%; }
-        .term-dot:nth-child(1) { background: #ff5f56; }
-        .term-dot:nth-child(2) { background: #ffbd2e; }
-        .term-dot:nth-child(3) { background: #27c93f; }
-        .term-line { margin-bottom: 8px; }
-        .term-prompt { color: #27c93f; font-weight: bold; }
-        .term-command { color: #fff; }
+        .project-card h3 { font-size: 20px; font-weight: 800; margin-bottom: 12px; }
+        .project-card p { font-size: 14px; color: var(--text-sub); line-height: 1.8; flex-grow: 1; }
 
-        /* ====== 第二屏：履历与状态 (高度利用屏幕) ====== */
-        .info-tag { display: inline-block; padding: 6px 14px; border-radius: 12px; font-size: 12px; font-weight: 800; background: var(--primary); color: #fff; margin-bottom: 10px; }
-        .info-title { font-size: 20px; font-weight: 800; margin-bottom: 15px; }
-        
-        .status-item { display: flex; justify-content: space-between; padding: 12px 0; border-bottom: 1px dashed var(--shadow-dark); font-size: 14px; font-weight: 600;}
-        .status-item:last-child { border-bottom: none; padding-bottom: 0; }
-        .status-val { color: var(--primary); }
+        /* 底部进入系统大按钮 */
+        .sys-btn {
+            display: block; width: 100%; padding: 22px; margin-top: 50px;
+            border-radius: 20px; background: var(--primary); color: #fff;
+            text-align: center; text-decoration: none; font-size: 16px; font-weight: 900; letter-spacing: 3px;
+            box-shadow: 10px 10px 20px rgba(74, 139, 220, 0.3), -10px -10px 20px var(--shadow-light);
+            transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+        .sys-btn:hover { transform: translateY(-5px); box-shadow: 15px 15px 30px rgba(74, 139, 220, 0.4); }
+        .sys-btn:active { transform: scale(0.98); box-shadow: inset 5px 5px 10px rgba(0,0,0,0.2); }
 
-        /* ====== 第三屏：底层与技术栈 ====== */
-        .tech-tags { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 20px; }
-        .tech-tag { padding: 10px 18px; border-radius: 16px; font-size: 13px; font-weight: 700; background: var(--bg-color); box-shadow: 4px 4px 8px var(--shadow-dark), -4px -4px 8px var(--shadow-light); transition: 0.3s; cursor: default; display: flex; align-items: center; gap: 8px;}
-        .tech-tag::before { content: ''; width: 6px; height: 6px; border-radius: 50%; background: var(--primary); }
-        .tech-tag:hover { transform: translateY(-3px) scale(1.05); color: var(--primary); }
-
-        .progress-wrap { margin-bottom: 20px; }
-        .progress-info { display: flex; justify-content: space-between; font-size: 13px; font-weight: 700; margin-bottom: 8px; }
-        .progress-bg { height: 12px; border-radius: 10px; background: var(--bg-color); box-shadow: inset 4px 4px 8px var(--shadow-dark), inset -4px -4px 8px var(--shadow-light); padding: 2px; }
-        .progress-fill { height: 100%; border-radius: 8px; background: var(--primary); width: 0; transition: width 1.5s cubic-bezier(0.25, 0.8, 0.25, 1); }
-
-        /* ====== 第四屏：项目与部署 ====== */
-        .project-meta { font-size: 12px; color: var(--text-sub); font-weight: 700; margin-bottom: 10px; display: flex; gap: 10px; }
-        .project-meta span { padding: 4px 10px; background: var(--bg-color); box-shadow: inset 3px 3px 6px var(--shadow-dark), inset -3px -3px 6px var(--shadow-light); border-radius: 8px; }
-
-        /* 滚动渐显动画 */
-        .fade-up { opacity: 0; transform: translateY(40px); transition: all 0.8s cubic-bezier(0.34, 1.56, 0.64, 1); }
+        /* ====== 滚动渐显动画 ====== */
+        .fade-up {
+            opacity: 0; transform: translateY(50px);
+            transition: opacity 0.8s ease, transform 0.8s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
         .fade-up.visible { opacity: 1; transform: translateY(0); }
+        .delay-1 { transition-delay: 0.1s; }
+        .delay-2 { transition-delay: 0.2s; }
 
-        /* 响应式 */
+        /* ====== 响应式 ====== */
         @media (max-width: 1024px) {
-            .sidebar { width: 100%; height: auto; position: relative; flex-direction: row; padding: 20px 5%; align-items: center; border-bottom: 1px solid var(--shadow-dark);}
-            .avatar-wrap { width: 60px; height: 60px; margin-bottom: 0; margin-right: 20px; }
-            .nav-links { display: none; } /* 移动端隐藏侧边栏 */
-            .theme-toggle { margin-top: 0; margin-left: auto; width: 40px; height: 40px; font-size: 16px;}
-            .main-content { margin-left: 0; padding: 0 5%; }
-            .col-span-8, .col-span-4, .col-span-6 { grid-column: span 12; } /* Bento 全部变单列 */
-            .hero-title { font-size: 40px; }
-            section { padding: 40px 0; }
+            .sidebar { width: 100%; height: auto; position: static; flex-direction: row; padding: 20px 5%; align-items: center; border-radius: 0 0 30px 30px; }
+            .avatar-wrap { margin-bottom: 0; width: 60px; height: 60px; }
+            .nav-links { display: none; }
+            .main-content { margin-left: 0; padding: 0 5% 50px 5%; }
+            .hero-grid, .resume-grid, .skills-container { grid-template-columns: 1fr; }
+            section { padding: 40px 0; min-height: auto; }
+            .section-title { font-size: 26px; }
         }
     </style>
 </head>
@@ -204,180 +346,165 @@
 
     <nav class="sidebar">
         <div class="avatar-wrap">
-            <img src="https://img.i8-mc.cn/file/J0NJk8wH.jpeg" alt="Avatar">
+            <img src="https://img.i8-mc.cn/file/J0NJk8wH.jpeg" alt="NKX Avatar">
         </div>
         <div class="nav-links">
-            <a href="#dashboard" class="nav-item active">Dashboard</a>
-            <a href="#profile" class="nav-item">Profile & Journey</a>
-            <a href="#stack" class="nav-item">Infrastructure Stack</a>
-            <a href="#projects" class="nav-item">Deployments</a>
+            <a href="#console" class="nav-item active">控制中心 (Console)</a>
+            <a href="#resume" class="nav-item">档案履历 (Profile)</a>
+            <a href="#infrastructure" class="nav-item">底层架构 (Stack)</a>
+            <a href="#deployments" class="nav-item">节点部署 (Nodes)</a>
         </div>
-        <div class="theme-toggle" id="theme-btn">🌓</div>
+        <div class="theme-toggle" id="theme-btn" title="切换深浅色">🌓</div>
     </nav>
 
     <main class="main-content">
         
-        <section id="dashboard">
-            <div class="bento-grid">
-                <div class="neo-box col-span-6 fade-up" style="justify-content: center;">
-                    <div class="info-tag" style="background: #10b981;">System Online</div>
+        <section id="console">
+            <div class="hero-grid">
+                <div class="fade-up">
                     <h1 class="hero-title">聂凯翔</h1>
-                    <div class="hero-role">独立开发者 / IDC 架构折腾党</div>
-                    <p class="hero-desc">
-                        18岁，坐标福建。在这个充斥着高级抽象框架的时代，我更偏爱游走在硬件底层与终端字符之间。从戴尔 R620 到超微主板，从 Debian 核心到 Proxmox VE 虚拟化集群，压榨服务器的每一滴性能是我的日常白噪音。
+                    <div class="hero-subtitle">独立开发者 / IDC 架构玩家</div>
+                    <p class="hero-text">
+                        你好，我是00后服务器“洋垃圾”抚养员。相比于满屏的 AI 生成代码，我更享受手指敲击键盘呼出终端界面的顿挫感。日常热衷于给 <strong>戴尔R620</strong> 更换硅脂，在 <strong>超微主板</strong> 上压榨 PVE 虚拟化集群的最后一丝性能。
                     </p>
-                    <div style="display: flex; gap: 15px;">
-                        <a href="https://blog.i8-mc.cn" class="neo-btn primary">访问博客网络</a>
-                        <a href="#projects" class="neo-btn">查看部署项</a>
+                    <div class="terminal">
+                        <span class="green">nkx@root</span>:<span class="blue">~</span># neofetch<br>
+                        OS: Debian 12 (Bookworm) x86_64<br>
+                        Kernel: Linux 6.1.0-server<br>
+                        Uptime: 18 years<br>
+                        Status: <span class="green">Online [blog.i8-mc.cn]</span><br>
+                        <span class="green">nkx@root</span>:<span class="blue">~</span># _ <span style="animation: blink 1s infinite;">█</span>
                     </div>
                 </div>
-
-                <div class="neo-box col-span-6 fade-up">
-                    <div class="terminal-panel" style="height: 100%;">
-                        <div class="term-header">
-                            <div class="term-dot"></div><div class="term-dot"></div><div class="term-dot"></div>
-                        </div>
-                        <div class="term-line"><span class="term-prompt">nkx@debian:~$</span> <span class="term-command">neofetch</span></div>
-                        <div style="display: flex; gap: 20px; margin-top: 15px; color: #fff;">
-                            <div style="color: var(--primary); font-weight: 900; font-size: 50px;">NKX</div>
-                            <div style="line-height: 1.8;">
-                                <span style="color:#ffbd2e">OS:</span> Debian GNU/Linux 12 (bullseye)<br>
-                                <span style="color:#ffbd2e">Host:</span> Proxmox Virtual Environment<br>
-                                <span style="color:#ffbd2e">Kernel:</span> 5.15.103-1-pve<br>
-                                <span style="color:#ffbd2e">Uptime:</span> 99.99% (SLA)<br>
-                                <span style="color:#ffbd2e">Node:</span> blog.i8-mc.cn
-                            </div>
-                        </div>
-                        <div class="term-line" style="margin-top: 20px;"><span class="term-prompt">nkx@debian:~$</span> <span class="term-command">tail -f /var/log/syslog</span><span style="animation: blink 1s infinite;">_</span></div>
+                
+                <div class="stats-grid fade-up delay-1">
+                    <div class="neo-card stat-box">
+                        <div class="stat-num">2026</div>
+                        <div class="stat-label">毕业/冲刺本科学历</div>
+                    </div>
+                    <div class="neo-card stat-box">
+                        <div class="stat-num">C1</div>
+                        <div class="stat-label">驾照备考目标</div>
+                    </div>
+                    <div class="neo-card stat-box">
+                        <div class="stat-num">99%</div>
+                        <div class="stat-label">服务节点可用性</div>
+                    </div>
+                    <div class="neo-card stat-box">
+                        <div class="stat-num">v1.3</div>
+                        <div class="stat-label">NIE 博客系统版本</div>
                     </div>
                 </div>
             </div>
         </section>
 
-        <section id="profile">
-            <h2 class="section-title fade-up">Profile & Journey</h2>
-            <div class="bento-grid">
+        <section id="resume">
+            <h2 class="section-title fade-up">档案履历</h2>
+            <div class="resume-grid">
                 
-                <div class="neo-box col-span-4 fade-up">
-                    <div class="info-tag">Education</div>
-                    <h3 class="info-title">福建信息职业技术学院</h3>
-                    <p style="color: var(--text-sub); font-size: 14px; font-weight: 600;">大一 / 计算机应用技术专业</p>
-                    <div class="neo-inset" style="margin-top: 25px;">
-                        <div class="status-item"><span>Current Status</span> <span class="status-val">专科在读</span></div>
-                        <div class="status-item"><span>Location</span> <span class="status-val">Fujian, China</span></div>
-                        <div class="status-item"><span>Age</span> <span class="status-val">18</span></div>
-                    </div>
-                </div>
-
-                <div class="neo-box col-span-4 fade-up">
-                    <div class="info-tag" style="background: #f59e0b;">Experience</div>
-                    <h3 class="info-title">福建苏辰网络科技</h3>
-                    <p style="color: var(--text-sub); font-size: 14px; font-weight: 600;">创始人 / 架构规划筹备</p>
-                    <p style="font-size: 13px; margin-top: 15px; color: var(--text-sub);">
-                        致力于 IDC 基础架构规划、企业级反向代理与网络分发测试。此前曾在 2025 年完成了信息设备维护与工作室实习，积累了一线硬件排障经验。
-                    </p>
-                </div>
-
-                <div class="neo-box col-span-4 fade-up">
-                    <div class="info-tag" style="background: #ef4444;">2026 Targets</div>
-                    <h3 class="info-title">主线任务进度</h3>
-                    
-                    <div class="progress-wrap" style="margin-top: 20px;">
-                        <div class="progress-info"><span>专升本备考 (Top-up Degree)</span><span>Active</span></div>
-                        <div class="progress-bg"><div class="progress-fill" data-width="70%"></div></div>
-                    </div>
-                    <div class="progress-wrap">
-                        <div class="progress-info"><span>C1 驾驶证获取</span><span>In Progress</span></div>
-                        <div class="progress-bg"><div class="progress-fill" data-width="45%"></div></div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <section id="stack">
-            <h2 class="section-title fade-up">Infrastructure Stack</h2>
-            <div class="bento-grid">
-                
-                <div class="neo-box col-span-8 fade-up">
-                    <h3 class="info-title">Hardware & Hypervisor</h3>
-                    <p style="font-size: 14px; color: var(--text-sub); margin-bottom: 20px;">偏爱实体物理机的轰鸣。精通企业级服务器硬件运维，并在之上构建高可用的虚拟化与容器集群。</p>
-                    
-                    <div class="progress-wrap">
-                        <div class="progress-info"><span>Linux Server (Debian / RHEL)</span><span>95%</span></div>
-                        <div class="progress-bg"><div class="progress-fill" data-width="95%"></div></div>
-                    </div>
-                    <div class="progress-wrap">
-                        <div class="progress-info"><span>Proxmox VE (PVE) 虚拟化引擎</span><span>90%</span></div>
-                        <div class="progress-bg"><div class="progress-fill" data-width="90%"></div></div>
-                    </div>
-                    <div class="progress-wrap">
-                        <div class="progress-info"><span>Dell R620 / Supermicro 硬件级维护</span><span>85%</span></div>
-                        <div class="progress-bg"><div class="progress-fill" data-width="85%"></div></div>
-                    </div>
-                </div>
-
-                <div class="neo-box col-span-4 fade-up" style="background: transparent; box-shadow: none; padding: 10px;">
-                    <h3 class="info-title" style="padding-left: 15px;">Software / Tools</h3>
-                    <div class="tech-tags">
-                        <div class="tech-tag">Docker</div>
-                        <div class="tech-tag">Nginx / 反向代理</div>
-                        <div class="tech-tag">Telegram API</div>
-                        <div class="tech-tag">PHP / .NET</div>
-                        <div class="tech-tag">Markdown</div>
-                        <div class="tech-tag">Markdown UI</div>
-                        <div class="tech-tag">Neumorphism</div>
-                        <div class="tech-tag">Git</div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <section id="projects">
-            <h2 class="section-title fade-up">Deployments & Automation</h2>
-            <div class="bento-grid">
-                
-                <div class="neo-box col-span-6 fade-up">
-                    <div class="project-meta"><span>Active</span><span>v1.3.4</span></div>
-                    <h3 class="info-title">NIE Blog System</h3>
-                    <p style="font-size: 14px; color: var(--text-sub); margin-bottom: 20px;">
-                        抛弃了臃肿繁杂的传统开源博客框架，从零开始独立重构开发的极简博客系统。
-                        底层深度定制了拟态(Neumorphism) UI 与原生 Markdown 渲染引擎，支持 RSS 聚合与阅读量统计。
-                    </p>
-                    <a href="https://blog.i8-mc.cn" target="_blank" class="neo-btn" style="margin-top: auto; padding: 12px 20px;">访问节点</a>
-                </div>
-
-                <div class="neo-box col-span-6 fade-up">
-                    <div class="project-meta"><span>Python / Shell</span><span>Automation</span></div>
-                    <h3 class="info-title">Oracle ARM Instance Bot</h3>
-                    <p style="font-size: 14px; color: var(--text-sub); margin-bottom: 20px;">
-                        为了抢占甲骨文（Oracle Cloud）凤凰城区域高稀缺性的 ARM 实例，手写并部署于后端服务器的自动化 Telegram 机器人。实现高并发 API 轮询与全天候消息推送监控。
-                    </p>
-                    <button class="neo-btn" style="margin-top: auto; padding: 12px 20px; cursor: default;">Deployed</button>
-                </div>
-
-                <div class="neo-box col-span-12 fade-up" style="flex-direction: row; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 20px;">
-                    <div>
-                        <div class="project-meta"><span>Media</span><span>TG Bot</span></div>
-                        <h3 class="info-title" style="margin-bottom: 8px;">Telegram Video Resend Bot</h3>
-                        <p style="font-size: 14px; color: var(--text-sub); max-width: 600px;">
-                            定制化开发的 Telegram 媒体处理机器狗。可自动化捕获、处理并重新分发群组内的视频资源，极大提升了服务器流媒体转发与社区管理的效率。
+                <div class="neo-card fade-up">
+                    <h3 style="margin-bottom: 25px; color: var(--primary);">[ 学术与教育 ]</h3>
+                    <div class="neo-inset">
+                        <div style="font-size: 18px; font-weight: 800; margin-bottom: 8px;">福建信息职业技术学院</div>
+                        <div style="font-size: 14px; font-weight: 600; color: var(--text-sub); margin-bottom: 15px;">计算机应用技术 | 大一在读</div>
+                        <p style="font-size: 14px; line-height: 1.8; color: var(--text-sub);">
+                            目前处于大一阶段，正在系统性夯实计算机网络与应用底层技术。在日常的学术任务之外，绝大部分精力投入到了真实环境的 IDC 服务器硬件运维、Linux 网络架构规划以及各类开源项目的自动化部署测试中。
                         </p>
                     </div>
-                    <button class="neo-btn" style="cursor: default;">System Running</button>
+                </div>
+
+                <div class="neo-card fade-up delay-1">
+                    <h3 style="margin-bottom: 25px; color: var(--primary);">[ 实践与进阶 ]</h3>
+                    <div class="timeline">
+                        <div class="timeline-item">
+                            <div class="time-date">2025.09 - 2025.12</div>
+                            <div class="time-title">信息设备维护实习</div>
+                            <div class="time-desc">于工作室完成硬件设备级维修、系统排错与网络基础配置的实战工作，积累了大量底层硬件除错经验。</div>
+                        </div>
+                        <div class="timeline-item">
+                            <div class="time-date">Active (筹备中)</div>
+                            <div class="time-title">福建苏辰网络科技</div>
+                            <div class="time-desc">作为创始人正在筹建的企业项目，主攻企业级反向代理、边缘节点加速分发、以及底层数据中心网络架构解决方案。</div>
+                        </div>
+                    </div>
                 </div>
 
             </div>
         </section>
 
-        <footer class="fade-up" style="text-align: center; padding: 40px 0; border-top: 1px dashed var(--shadow-dark); margin-top: 40px; color: var(--text-sub); font-size: 13px; font-weight: 600;">
-            <p>© 2026 聂凯翔 (NKX). All Systems Operational.</p>
-            <p style="margin-top: 5px;">Powered by Debian & Proxmox VE. Design based on Neumorphism.</p>
-        </footer>
+        <section id="infrastructure">
+            <h2 class="section-title fade-up">底层架构栈</h2>
+            <div class="skills-container">
+                
+                <div class="neo-card fade-up">
+                    <div class="skill-item">
+                        <div class="skill-info"><span>Linux 操作系统 (Debian / RHEL)</span><span>95%</span></div>
+                        <div class="progress-bg"><div class="progress-fill" data-width="95%"></div></div>
+                    </div>
+                    <div class="skill-item">
+                        <div class="skill-info"><span>Proxmox VE (PVE) 底层虚拟化</span><span>90%</span></div>
+                        <div class="progress-bg"><div class="progress-fill" data-width="90%"></div></div>
+                    </div>
+                    <div class="skill-item">
+                        <div class="skill-info"><span>Dell R620 / Supermicro 硬件级运维</span><span>85%</span></div>
+                        <div class="progress-bg"><div class="progress-fill" data-width="85%"></div></div>
+                    </div>
+                    <div class="skill-item">
+                        <div class="skill-info"><span>Telegram Bot 高并发自动化开发</span><span>80%</span></div>
+                        <div class="progress-bg"><div class="progress-fill" data-width="80%"></div></div>
+                    </div>
+                </div>
+
+                <div class="neo-card fade-up delay-1">
+                    <h3 style="margin-bottom: 25px; font-size: 16px;">工具链与中间件库</h3>
+                    <div class="tags-matrix">
+                        <div class="neo-tag">Nginx 反向代理集群</div>
+                        <div class="neo-tag">Docker / 容器化部署</div>
+                        <div class="neo-tag">Oracle Cloud (ARM架构)</div>
+                        <div class="neo-tag">Markdown 渲染引擎开发</div>
+                        <div class="neo-tag">UI 框架拟态设计</div>
+                        <div class="neo-tag">Telegram API 对接</div>
+                        <div class="neo-tag">BASH 自动化脚本</div>
+                        <div class="neo-tag">CDN 节点配置</div>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <section id="deployments">
+            <h2 class="section-title fade-up">核心节点部署</h2>
+            <div class="projects-grid">
+                
+                <a href="https://blog.i8-mc.cn" target="_blank" class="neo-card project-card fade-up">
+                    <div class="project-status status-dev">持续迭代中 (v1.3.4)</div>
+                    <h3>NIE Blog System</h3>
+                    <p>抛弃臃肿的传统开源框架，从零独立重构开发的客制化博客系统。纯手工打造极简极客 UI，深度集成了高效的 Markdown 渲染引擎与数据统计面板，目前稳定承载主站流量。</p>
+                </a>
+
+                <div class="neo-card project-card fade-up delay-1" style="cursor: default;">
+                    <div class="project-status status-run">24H 守护运行</div>
+                    <h3>Oracle ARM 自动化监控 Bot</h3>
+                    <p>针对甲骨文 (Oracle Cloud) 凤凰城高需求 ARM 资源实例开发的并发利器。深度对接 Telegram 机器人底层接口，实现自部署无服务器依赖的全天候自动化抢占与警报。</p>
+                </div>
+
+                <div class="neo-card project-card fade-up delay-2" style="cursor: default;">
+                    <div class="project-status status-plan">架构筹备中</div>
+                    <h3>苏辰网络 - 全局反代分发网</h3>
+                    <p>基于底层多台高配服务器建立的企业级测试项目，利用多层 Nginx 反向代理实现业务的高可用分发与灾备，核心节点服务现已挂载于 blog.i8-mc.cn 进行连通性压测。</p>
+                </div>
+
+            </div>
+
+            <div class="fade-up" style="margin-top: 20px;">
+                <a href="https://blog.i8-mc.cn" class="sys-btn">验证身份并载入主干网络 ➔</a>
+            </div>
+        </section>
 
     </main>
 
     <script>
-        // ====== 1. 深浅色模式切换 ======
+        // ====== 1. 黑白深浅色模式切换 ======
         const themeBtn = document.getElementById('theme-btn');
         const currentTheme = localStorage.getItem('theme') || 'light';
         document.documentElement.setAttribute('data-theme', currentTheme);
@@ -389,17 +516,24 @@
             localStorage.setItem('theme', newTheme);
         });
 
-        // ====== 2. 滚动监听：多屏平滑浮现 (Fade-up) 与 进度条加载 ======
-        const observerOptions = { threshold: 0.15, rootMargin: "0px 0px -50px 0px" };
+        // ====== 2. 页面滚动渐显与进度条动画加载 ======
+        const observerOptions = {
+            threshold: 0.15,
+            rootMargin: "0px 0px -50px 0px"
+        };
+
         const observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
+                    // 卡片渐显
                     entry.target.classList.add('visible');
-                    // 当模块进入视口时，触发进度条生长动画
-                    const bars = entry.target.querySelectorAll('.progress-fill');
-                    if(bars.length > 0) {
+                    
+                    // 技能条增长动画触发
+                    if(entry.target.querySelector('.progress-fill')) {
                         setTimeout(() => {
-                            bars.forEach(bar => bar.style.width = bar.getAttribute('data-width'));
+                            entry.target.querySelectorAll('.progress-fill').forEach(bar => {
+                                bar.style.width = bar.getAttribute('data-width');
+                            });
                         }, 200);
                     }
                 }
@@ -415,13 +549,15 @@
         window.addEventListener('scroll', () => {
             let current = '';
             sections.forEach(section => {
-                if (pageYOffset >= section.offsetTop - 250) {
+                const sectionTop = section.offsetTop;
+                if (pageYOffset >= sectionTop - 300) {
                     current = section.getAttribute('id');
                 }
             });
+
             navLinks.forEach(link => {
                 link.classList.remove('active');
-                if (link.getAttribute('href') === `#${current}`) {
+                if (link.getAttribute('href').includes(current)) {
                     link.classList.add('active');
                 }
             });
