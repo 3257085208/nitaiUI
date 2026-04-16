@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>聶.NET - 个人主页</title>
+    <style>
+        /* 引入极客风格等宽字体 */
+        @font-face {
+            font-family: 'Termius';
+            /* 如果本地有字体文件可在此引入 src: url('path/to/termius.woff'); */
+        }
+
+        :root {
+            --bg-color: #e0e5ec;
+            --shadow-light: #ffffff;
+            --shadow-dark: #a3b1c6;
+            --text-main: #333333;
+            --text-sub: #666666;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            font-family: 'Termius', 'Consolas', 'Courier New', monospace;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+
+        /* 核心拟态外框 */
+        .container {
+            width: 100%;
+            max-width: 700px;
+            padding: 50px 40px;
+            border-radius: 24px;
+            background: var(--bg-color);
+            box-shadow: 12px 12px 24px rgba(163, 177, 198, 0.6), 
+                        -12px -12px 24px rgba(255, 255, 255, 0.7);
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        /* 头像/Logo - 凸起效果 */
+        .avatar {
+            width: 110px;
+            height: 110px;
+            margin: 0 auto 20px;
+            border-radius: 50%;
+            background: var(--bg-color);
+            box-shadow: 7px 7px 14px rgba(163, 177, 198, 0.6), 
+                       -7px -7px 14px rgba(255, 255, 255, 0.7);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 42px;
+            font-weight: bold;
+            color: var(--text-main);
+        }
+
+        .title {
+            margin: 10px 0 5px;
+            font-size: 26px;
+            letter-spacing: 2px;
+        }
+
+        .subtitle {
+            font-size: 14px;
+            color: var(--text-sub);
+            margin-bottom: 40px;
+        }
+
+        /* 技能/信息卡片网格 */
+        .card-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 25px;
+            margin-bottom: 40px;
+        }
+
+        /* 卡片 - 凹陷（内阴影）效果 */
+        .card {
+            padding: 25px 20px;
+            border-radius: 16px;
+            background: var(--bg-color);
+            box-shadow: inset 6px 6px 12px rgba(163, 177, 198, 0.5), 
+                        inset -6px -6px 12px rgba(255, 255, 255, 0.8);
+            text-align: left;
+        }
+
+        .card h3 {
+            margin-top: 0;
+            font-size: 16px;
+            border-bottom: 1px dashed #ccc;
+            padding-bottom: 8px;
+            margin-bottom: 15px;
+        }
+
+        .card p {
+            font-size: 13px;
+            color: var(--text-sub);
+            margin: 8px 0;
+            display: flex;
+            align-items: center;
+        }
+
+        .card p::before {
+            content: '>';
+            margin-right: 8px;
+            color: #888;
+            font-weight: bold;
+        }
+
+        /* 交互按钮区域 */
+        .actions {
+            display: flex;
+            justify-content: center;
+            gap: 25px;
+            flex-wrap: wrap;
+        }
+
+        /* 拟态按钮 - 默认外凸，Hover时内凹 */
+        .neo-btn {
+            padding: 14px 35px;
+            border-radius: 12px;
+            background: var(--bg-color);
+            box-shadow: 6px 6px 12px rgba(163, 177, 198, 0.6), 
+                       -6px -6px 12px rgba(255, 255, 255, 0.7);
+            color: var(--text-main);
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 15px;
+            transition: all 0.2s ease-in-out;
+            cursor: pointer;
+            border: none;
+            outline: none;
+        }
+
+        .neo-btn:hover, .neo-btn:active {
+            box-shadow: inset 4px 4px 8px rgba(163, 177, 198, 0.6), 
+                        inset -4px -4px 8px rgba(255, 255, 255, 0.7);
+            color: #000;
+        }
+
+        /* 响应式设计 */
+        @media (max-width: 600px) {
+            .card-grid {
+                grid-template-columns: 1fr;
+            }
+            .container {
+                padding: 30px 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <div class="avatar">
+            <span>聶</span>
+        </div>
+        
+        <h1 class="title">聶.NET</h1>
+        <p class="subtitle">System Administrator & Developer</p>
+
+        <div class="card-grid">
+            <div class="card">
+                <h3>[Infrastructure]</h3>
+                <p>Dell R620 & Supermicro Mgt</p>
+                <p>Proxmox VE Virtualization</p>
+                <p>IDC Network Configuration</p>
+            </div>
+            <div class="card">
+                <h3>[Stack & Dev]</h3>
+                <p>Debian / RedHat Linux</p>
+                <p>Telegram Bot Automation</p>
+                <p>Blog System Development</p>
+            </div>
+        </div>
+
+        <div class="actions">
+            <a href="https://blog.i8-mc.cn" class="neo-btn">访问博客</a>
+            <a href="#" class="neo-btn">系统状态</a>
+            <a href="#" class="neo-btn">关于我</a>
+        </div>
+    </div>
+
+    <script>
+        // 预留的微妙动画或交互脚本位置
+        // 比如可以添加一个点击按钮触发音效或微小形变的代码
+        document.querySelectorAll('.neo-btn').forEach(btn => {
+            btn.addEventListener('mousedown', function() {
+                this.style.transform = 'scale(0.97)';
+            });
+            btn.addEventListener('mouseup', function() {
+                this.style.transform = 'scale(1)';
+            });
+            btn.addEventListener('mouseleave', function() {
+                this.style.transform = 'scale(1)';
+            });
+        });
+    </script>
+</body>
+</html>
