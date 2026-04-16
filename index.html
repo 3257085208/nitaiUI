@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>聶.NET - 拟态主页</title>
+    <title>聂凯翔 (NKX) - 终端主页</title>
     <style>
         :root {
             --bg-color: #e0e5ec;
@@ -12,13 +12,14 @@
             --shadow-dark: rgba(163, 177, 198, 0.7);
             --shadow-light: rgba(255, 255, 255, 0.9);
             --primary: #4e80ee;
+            --primary-hover: #3b66c4;
         }
 
         * {
             box-sizing: border-box;
             margin: 0;
             padding: 0;
-            transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+            transition: all 0.35s cubic-bezier(0.25, 0.8, 0.25, 1);
             -webkit-font-smoothing: antialiased;
         }
 
@@ -30,33 +31,71 @@
             justify-content: center;
             align-items: center;
             min-height: 100vh;
-            padding: 40px 20px;
+            /* 极大幅度缩减外围留白，提升屏占比 */
+            padding: 3vh 2vw; 
             overflow-x: hidden;
         }
 
-        /* 主容器：Grid 三栏布局 */
+        /* 主容器：铺满屏幕的控制台风格 */
         .neumorphic-wrapper {
             width: 100%;
-            max-width: 1100px;
-            border-radius: 35px;
+            max-width: 1750px;
+            min-height: 94vh;
+            border-radius: 40px;
             background: var(--bg-color);
-            box-shadow: 20px 20px 40px var(--shadow-dark),
-                       -20px -20px 40px var(--shadow-light);
+            box-shadow: 18px 18px 36px var(--shadow-dark),
+                       -18px -18px 36px var(--shadow-light);
             padding: 45px;
             display: grid;
-            grid-template-columns: 2.5fr 3.5fr 3.5fr;
+            grid-template-columns: 2.2fr 4fr 3fr;
+            grid-template-rows: auto 1fr;
             gap: 40px;
-            animation: float 6s ease-in-out infinite;
         }
 
-        @keyframes float {
-            0% { transform: translateY(0px); }
-            50% { transform: translateY(-10px); }
-            100% { transform: translateY(0px); }
+        /* 基础凹陷面板 */
+        .inset-panel {
+            background: var(--bg-color);
+            border-radius: 28px;
+            padding: 35px;
+            box-shadow: inset 8px 8px 16px var(--shadow-dark),
+                       inset -8px -8px 16px var(--shadow-light);
+            display: flex;
+            flex-direction: column;
         }
 
-        /* ================= 第一栏：个人轮廓 ================= */
+        /* 基础凸起面板 */
+        .outset-panel {
+            background: var(--bg-color);
+            border-radius: 28px;
+            padding: 35px;
+            box-shadow: 10px 10px 20px var(--shadow-dark),
+                       -10px -10px 20px var(--shadow-light);
+        }
+
+        .panel-title {
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 25px;
+            display: flex;
+            align-items: center;
+            color: var(--text-main);
+            letter-spacing: 1px;
+        }
+
+        .panel-title::before {
+            content: '';
+            display: block;
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: var(--primary);
+            margin-right: 12px;
+            box-shadow: 0 0 10px var(--primary);
+        }
+
+        /* ================= 左侧：个人轮廓 (跨两行) ================= */
         .profile-section {
+            grid-row: span 2;
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -64,14 +103,14 @@
         }
 
         .avatar-container {
-            width: 140px;
-            height: 140px;
+            width: 160px;
+            height: 160px;
             border-radius: 50%;
-            padding: 8px;
+            padding: 10px;
             background: var(--bg-color);
             box-shadow: 10px 10px 20px var(--shadow-dark),
                        -10px -10px 20px var(--shadow-light);
-            margin-bottom: 25px;
+            margin-bottom: 30px;
             position: relative;
             display: flex;
             justify-content: center;
@@ -84,13 +123,11 @@
             top: 0; left: 0; right: 0; bottom: 0;
             border-radius: 50%;
             border: 2px dashed var(--primary);
-            animation: spin 12s linear infinite;
-            opacity: 0.4;
+            animation: spin 15s linear infinite;
+            opacity: 0.5;
         }
 
-        @keyframes spin {
-            100% { transform: rotate(360deg); }
-        }
+        @keyframes spin { 100% { transform: rotate(360deg); } }
 
         .avatar-inner {
             width: 100%;
@@ -102,231 +139,190 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            font-size: 46px;
-            font-weight: bold;
+            font-size: 40px;
+            font-weight: 900;
             color: var(--primary);
             text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
         }
 
         .name {
-            font-size: 24px;
+            font-size: 28px;
             font-weight: 800;
-            letter-spacing: 2px;
-            margin-bottom: 10px;
+            letter-spacing: 3px;
+            margin-bottom: 15px;
         }
 
         .bio {
-            font-size: 13px;
-            color: var(--text-sub);
-            line-height: 1.8;
-            margin-bottom: 30px;
-        }
-
-        .btn-group {
-            display: flex;
-            gap: 15px;
-        }
-
-        .icon-btn {
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            cursor: pointer;
-            text-decoration: none;
-            color: var(--text-sub);
-            font-weight: bold;
             font-size: 14px;
+            color: var(--text-sub);
+            line-height: 2;
+            margin-bottom: 35px;
+            padding: 0 15px;
+        }
+
+        /* 个人状态小卡片 */
+        .status-badge {
+            width: 100%;
+            padding: 15px;
+            border-radius: 16px;
             background: var(--bg-color);
-            box-shadow: 6px 6px 12px var(--shadow-dark),
-                       -6px -6px 12px var(--shadow-light);
-        }
-
-        .icon-btn:hover {
-            color: var(--primary);
-            transform: translateY(-3px);
-        }
-
-        .icon-btn:active {
-            transform: translateY(0);
             box-shadow: inset 4px 4px 8px var(--shadow-dark),
                        inset -4px -4px 8px var(--shadow-light);
-        }
-
-        /* ================= 共享面板样式 ================= */
-        .inset-panel {
-            background: var(--bg-color);
-            border-radius: 24px;
-            padding: 30px;
-            box-shadow: inset 8px 8px 16px var(--shadow-dark),
-                       inset -8px -8px 16px var(--shadow-light);
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-        }
-
-        .panel-title {
-            font-size: 16px;
-            font-weight: bold;
-            margin-bottom: 25px;
+            margin-bottom: 15px;
+            font-size: 13px;
+            color: var(--text-sub);
             display: flex;
             align-items: center;
+            text-align: left;
         }
-
-        .panel-title::before {
-            content: '';
-            display: block;
+        
+        .status-badge i {
+            display: inline-block;
             width: 8px;
             height: 8px;
             border-radius: 50%;
-            background: var(--primary);
+            background: #48bb78;
             margin-right: 12px;
-            box-shadow: 0 0 8px var(--primary);
         }
 
-        /* ================= 第二栏：技能进度条 ================= */
-        .skill-item { margin-bottom: 22px; }
-        
-        .skill-item:last-child { margin-bottom: 0; }
+        /* ================= 中间上：履历与介绍 ================= */
+        .about-content p {
+            font-size: 14px;
+            line-height: 1.9;
+            color: var(--text-sub);
+            margin-bottom: 18px;
+        }
+        .about-content p strong {
+            color: var(--text-main);
+        }
 
+        /* ================= 中间下：技术栈进度条 ================= */
+        .skill-item { margin-bottom: 25px; }
+        .skill-item:last-child { margin-bottom: 0; }
+        
         .skill-info {
             display: flex;
             justify-content: space-between;
-            font-size: 13px;
-            margin-bottom: 10px;
+            font-size: 14px;
+            margin-bottom: 12px;
             font-weight: 600;
-            color: var(--text-sub);
+            color: var(--text-main);
         }
 
         .progress-bar-bg {
-            height: 10px;
-            border-radius: 10px;
+            height: 14px;
+            border-radius: 14px;
             background: var(--bg-color);
-            box-shadow: inset 4px 4px 8px var(--shadow-dark),
-                       inset -4px -4px 8px var(--shadow-light);
+            box-shadow: inset 5px 5px 10px var(--shadow-dark),
+                       inset -5px -5px 10px var(--shadow-light);
             overflow: hidden;
         }
 
         .progress-bar-fill {
             height: 100%;
-            border-radius: 10px;
-            background: var(--primary);
+            border-radius: 14px;
+            background: linear-gradient(90deg, #4e80ee, #82a8ff);
             position: relative;
             width: 0;
-            transition: width 1.5s cubic-bezier(0.1, 0.5, 0.2, 1);
+            transition: width 1.8s cubic-bezier(0.1, 0.5, 0.2, 1);
         }
 
-        .progress-bar-fill::after {
-            content: '';
-            position: absolute;
-            top: 0; left: 0; bottom: 0; right: 0;
-            background: linear-gradient(90deg, rgba(255,255,255,0) 0%, rgba(255,255,255,0.4) 50%, rgba(255,255,255,0) 100%);
-            animation: shimmer 2.5s infinite;
-        }
-
-        @keyframes shimmer {
-            0% { transform: translateX(-100%); }
-            100% { transform: translateX(100%); }
-        }
-
-        /* ================= 第三栏：项目卡片 ================= */
-        .project-list {
+        /* ================= 右侧：项目大盘 (跨两行) ================= */
+        .projects-section {
+            grid-row: span 2;
             display: flex;
             flex-direction: column;
-            gap: 18px;
+            gap: 25px;
         }
 
         .project-card {
-            padding: 16px 20px;
-            border-radius: 16px;
+            padding: 22px;
+            border-radius: 20px;
             background: var(--bg-color);
-            box-shadow: 5px 5px 10px var(--shadow-dark),
-                       -5px -5px 10px var(--shadow-light);
+            box-shadow: 8px 8px 16px var(--shadow-dark),
+                       -8px -8px 16px var(--shadow-light);
             text-decoration: none;
-            color: var(--text-main);
             display: block;
+            position: relative;
+            overflow: hidden;
         }
 
         .project-card:hover {
-            box-shadow: inset 4px 4px 8px var(--shadow-dark),
-                       inset -4px -4px 8px var(--shadow-light);
+            box-shadow: inset 6px 6px 12px var(--shadow-dark),
+                       inset -6px -6px 12px var(--shadow-light);
+            transform: scale(0.99);
         }
 
         .project-card h4 {
-            font-size: 14px;
-            margin-bottom: 6px;
+            font-size: 16px;
+            margin-bottom: 8px;
+            color: var(--text-main);
         }
 
         .project-card p {
-            font-size: 12px;
+            font-size: 13px;
             color: var(--text-sub);
+            line-height: 1.6;
         }
 
+        .project-card .tag {
+            position: absolute;
+            top: 22px;
+            right: 22px;
+            font-size: 11px;
+            padding: 4px 10px;
+            border-radius: 8px;
+            background: var(--bg-color);
+            box-shadow: inset 3px 3px 6px var(--shadow-dark),
+                       inset -3px -3px 6px var(--shadow-light);
+            color: var(--primary);
+            font-weight: bold;
+        }
+
+        /* 控制台登录按钮 */
         .enter-btn {
             display: block;
             text-align: center;
-            padding: 16px;
-            margin-top: 20px;
-            border-radius: 16px;
+            padding: 20px;
+            margin-top: auto;
+            border-radius: 20px;
             text-decoration: none;
-            color: var(--primary);
+            color: #fff;
             font-weight: bold;
-            font-size: 14px;
-            letter-spacing: 2px;
-            background: var(--bg-color);
-            box-shadow: 8px 8px 16px var(--shadow-dark),
+            font-size: 16px;
+            letter-spacing: 4px;
+            background: var(--primary);
+            box-shadow: 8px 8px 16px rgba(78, 128, 238, 0.4),
                        -8px -8px 16px var(--shadow-light);
         }
 
         .enter-btn:active {
-            box-shadow: inset 5px 5px 10px var(--shadow-dark),
-                       inset -5px -5px 10px var(--shadow-light);
+            background: var(--primary-hover);
+            box-shadow: inset 5px 5px 10px rgba(0, 0, 0, 0.2);
         }
 
-        /* ================= 三端自适应响应式 ================= */
-
-        /* 平板端：转为两栏，个人信息横向排布置顶 */
-        @media (max-width: 1024px) {
+        /* ================= 响应式调整 ================= */
+        @media (max-width: 1400px) {
             .neumorphic-wrapper {
                 grid-template-columns: 1fr 1fr;
-                padding: 40px;
-                animation: none; /* 平板下关闭悬浮减少性能消耗 */
+                grid-template-rows: auto auto auto;
             }
-            .profile-section {
-                grid-column: span 2;
-                flex-direction: row;
-                text-align: left;
-                justify-content: center;
-                gap: 40px;
-                padding-bottom: 20px;
-                border-bottom: 2px dashed rgba(163, 177, 198, 0.3);
-            }
-            .avatar-container { margin-bottom: 0; }
-            .bio { margin-bottom: 15px; }
+            .profile-section { grid-row: span 1; grid-column: span 2; flex-direction: row; text-align: left; gap: 40px; padding: 20px; }
+            .avatar-container { margin-bottom: 0; width: 130px; height: 130px; }
+            .projects-section { grid-column: span 2; }
         }
 
-        /* 移动端：全变单栏纵向 */
         @media (max-width: 768px) {
-            body { padding: 20px 15px; }
+            body { padding: 15px; }
             .neumorphic-wrapper {
                 grid-template-columns: 1fr;
-                padding: 30px 20px;
-                gap: 30px;
-                border-radius: 28px;
+                padding: 25px;
+                border-radius: 30px;
+                gap: 25px;
             }
-            .profile-section {
-                grid-column: span 1;
-                flex-direction: column;
-                text-align: center;
-                gap: 0;
-                border-bottom: none;
-                padding-bottom: 0;
-            }
-            .avatar-container { margin-bottom: 20px; }
-            .bio { margin-bottom: 25px; }
-            .btn-group { justify-content: center; }
+            .profile-section { grid-column: span 1; flex-direction: column; text-align: center; gap: 20px; }
+            .projects-section { grid-column: span 1; }
+            .outset-panel, .inset-panel { padding: 25px; }
         }
     </style>
 </head>
@@ -334,104 +330,91 @@
 
     <div class="neumorphic-wrapper">
         
-        <div class="profile-section">
+        <div class="outset-panel profile-section">
             <div class="avatar-container">
-                <div class="avatar-inner">聶</div>
+                <div class="avatar-inner">NKX</div>
             </div>
             <div>
-                <h1 class="name">聶.NET</h1>
+                <h1 class="name">聂凯翔</h1>
                 <p class="bio">
-                    Fujian / Server Administrator<br>
-                    IDC System & Virtualization
+                    System Administrator & Developer<br>
+                    Fujian, China
                 </p>
-                <div class="btn-group">
-                    <a href="https://blog.i8-mc.cn" class="icon-btn" title="Blog">B</a>
-                    <a href="#" class="icon-btn" title="Telegram">T</a>
-                    <a href="#" class="icon-btn" title="Email">E</a>
+                
+                <div class="status-badge">
+                    <i></i> 2026: Preparing for Univ. Top-up Degree
+                </div>
+                <div class="status-badge" style="background: transparent; box-shadow: none; border: 1px dashed #ccc;">
+                    <span style="color: #ccc; margin-right:12px;">></span> Objective: C1 Driver's License
                 </div>
             </div>
         </div>
 
         <div class="inset-panel">
+            <div class="panel-title">Terminal Info</div>
+            <div class="about-content">
+                <p><strong>[EDU]</strong> 毕业于中职院校 (2026届)，具备扎实的信息设备维护与 IDC 架构基础。</p>
+                <p><strong>[EXP]</strong> 曾于 2025 年完成信息设备维护实习。现为 <strong>福建苏辰网络科技有限公司</strong> 创始人，专注于服务器硬件评测、网络规划与底层虚拟化部署。</p>
+            </div>
+        </div>
+
+        <div class="inset-panel">
+            <div class="panel-title">Infrastructure Stack</div>
             <div>
-                <div class="panel-title">Infrastructure Stack</div>
-                
                 <div class="skill-item">
-                    <div class="skill-info">
-                        <span>Debian / RedHat Linux</span>
-                        <span>95%</span>
-                    </div>
-                    <div class="progress-bar-bg">
-                        <div class="progress-bar-fill" data-width="95%"></div>
-                    </div>
+                    <div class="skill-info"><span>Debian / RedHat Linux</span><span>95%</span></div>
+                    <div class="progress-bar-bg"><div class="progress-bar-fill" data-width="95%"></div></div>
                 </div>
-
                 <div class="skill-item">
-                    <div class="skill-info">
-                        <span>Proxmox VE</span>
-                        <span>90%</span>
-                    </div>
-                    <div class="progress-bar-bg">
-                        <div class="progress-bar-fill" data-width="90%"></div>
-                    </div>
+                    <div class="skill-info"><span>Proxmox VE Virtualization</span><span>90%</span></div>
+                    <div class="progress-bar-bg"><div class="progress-bar-fill" data-width="90%"></div></div>
                 </div>
-
                 <div class="skill-item">
-                    <div class="skill-info">
-                        <span>Dell R620 / Supermicro Mgt</span>
-                        <span>85%</span>
-                    </div>
-                    <div class="progress-bar-bg">
-                        <div class="progress-bar-fill" data-width="85%"></div>
-                    </div>
+                    <div class="skill-info"><span>Dell R620 / Supermicro Mgt</span><span>85%</span></div>
+                    <div class="progress-bar-bg"><div class="progress-bar-fill" data-width="85%"></div></div>
                 </div>
-
                 <div class="skill-item">
-                    <div class="skill-info">
-                        <span>TG Bot Automation</span>
-                        <span>80%</span>
-                    </div>
-                    <div class="progress-bar-bg">
-                        <div class="progress-bar-fill" data-width="80%"></div>
-                    </div>
+                    <div class="skill-info"><span>TG Bot Automation</span><span>80%</span></div>
+                    <div class="progress-bar-bg"><div class="progress-bar-fill" data-width="80%"></div></div>
                 </div>
             </div>
         </div>
 
-        <div class="inset-panel" style="background: transparent; box-shadow: none; padding: 0;">
-            <div class="panel-title" style="padding-left: 10px;">Operations & Projects</div>
+        <div class="projects-section">
+            <div class="panel-title" style="margin-bottom: 5px;">Deployments & Projects</div>
             
-            <div class="project-list">
-                <a href="#" class="project-card">
-                    <h4>Fujian Suchen Internet Co., Ltd.</h4>
-                    <p>Founder / Infrastructure Planning</p>
-                </a>
-                
-                <a href="#" class="project-card">
-                    <h4>NIE Blog System (v1.3.4)</h4>
-                    <p>Core Developer / Custom UI Framework</p>
-                </a>
+            <a href="#" class="project-card">
+                <span class="tag">Active</span>
+                <h4>NIE Blog System (v1.3.4)</h4>
+                <p>独立开发维护的极简客制化博客系统，支持 Markdown 渲染与高度定制的 UI 框架。</p>
+            </a>
 
-                <a href="#" class="project-card">
-                    <h4>Oracle ARM Instance Bot</h4>
-                    <p>Deployment & Automation Maintainer</p>
-                </a>
-            </div>
+            <a href="#" class="project-card">
+                <span class="tag">Cloud</span>
+                <h4>Oracle ARM Instance Bot</h4>
+                <p>自部署于服务器的自动化 Telegram 机器人，用于 Oracle Cloud 凤凰城区域的高并发资源获取与监控。</p>
+            </a>
 
-            <a href="https://blog.i8-mc.cn" class="enter-btn">SYSTEM LOGIN</a>
+            <a href="#" class="project-card">
+                <span class="tag">Network</span>
+                <h4>Suchen Reverse Proxy</h4>
+                <p>企业级节点分发与反向代理架构配置，核心服务节点绑定于 blog.i8-mc.cn。</p>
+            </a>
+
+            <a href="https://blog.i8-mc.cn" class="enter-btn">ENTER SYSTEM</a>
         </div>
 
     </div>
 
     <script>
-        // 进度条动画装载
+        // 进度条加载动画
         window.onload = () => {
             setTimeout(() => {
                 document.querySelectorAll('.progress-bar-fill').forEach(bar => {
                     const targetWidth = bar.getAttribute('data-width');
                     bar.style.width = targetWidth;
                 });
-            }, 350); 
+            }, 400); 
         };
     </script>
 </body>
