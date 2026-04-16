@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>聂凯翔 - 个人终端系统</title>
+    <title>聶.NET - 个人终端系统</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;900&display=swap" rel="stylesheet">
     <style>
         /* ====== 核心变量与深浅色模式系统 ====== */
@@ -16,6 +16,8 @@
             --primary: #4a8bdc;
             --primary-hover: #3572bf;
             --terminal-bg: #e6e9f0;
+            /* 神秘技能专属色 */
+            --mystic: #8b5cf6; 
         }
 
         [data-theme="dark"] {
@@ -27,6 +29,7 @@
             --primary: #60a5fa;
             --primary-hover: #3b82f6;
             --terminal-bg: #151822;
+            --mystic: #a78bfa;
         }
 
         * {
@@ -42,267 +45,186 @@
         body {
             background-color: var(--bg-color);
             color: var(--text-main);
-            /* 中文调用苹果/微软雅黑顶级渲染，英文走Inter */
             font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', sans-serif;
             transition: background-color 0.5s ease, color 0.5s ease;
             overflow-x: hidden;
             line-height: 1.6;
         }
 
+        a { text-decoration: none; color: inherit; }
+
         /* ====== 导航侧边栏 ====== */
         .sidebar {
-            position: fixed;
-            top: 0; left: 0;
-            width: 280px;
-            height: 100vh;
+            position: fixed; top: 0; left: 0;
+            width: 280px; height: 100vh;
             padding: 50px 30px;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
+            display: flex; flex-direction: column; justify-content: space-between;
             z-index: 100;
         }
 
         .avatar-wrap {
-            width: 100px;
-            height: 100px;
+            width: 100px; height: 100px;
             border-radius: 50%;
             background: var(--bg-color);
-            box-shadow: 8px 8px 16px var(--shadow-dark),
-                       -8px -8px 16px var(--shadow-light);
-            padding: 6px;
-            margin-bottom: 20px;
+            box-shadow: 8px 8px 16px var(--shadow-dark), -8px -8px 16px var(--shadow-light);
+            padding: 6px; margin-bottom: 20px;
             transition: all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+            display: block;
         }
 
         .avatar-wrap img {
             width: 100%; height: 100%;
             border-radius: 50%; object-fit: cover;
         }
+        
+        .avatar-wrap:hover { transform: rotate(10deg) scale(1.05); }
 
-        .nav-links {
-            display: flex;
-            flex-direction: column;
-            gap: 18px;
-        }
+        .nav-links { display: flex; flex-direction: column; gap: 16px; }
 
         .nav-item {
-            text-decoration: none;
-            color: var(--text-sub);
-            font-weight: 700;
-            font-size: 15px;
-            padding: 16px 20px;
-            border-radius: 16px;
+            color: var(--text-sub); font-weight: 700; font-size: 15px;
+            padding: 14px 20px; border-radius: 16px;
             transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
             display: flex; align-items: center;
         }
 
         .nav-item::before {
-            content: ''; display: inline-block;
-            width: 6px; height: 6px; border-radius: 50%;
-            background: transparent; margin-right: 12px;
-            transition: all 0.3s;
+            content: ''; display: inline-block; width: 6px; height: 6px; border-radius: 50%;
+            background: transparent; margin-right: 12px; transition: all 0.3s;
         }
 
         .nav-item:hover, .nav-item.active {
-            color: var(--primary);
-            background: var(--bg-color);
-            box-shadow: 6px 6px 12px var(--shadow-dark),
-                       -6px -6px 12px var(--shadow-light);
+            color: var(--primary); background: var(--bg-color);
+            box-shadow: 6px 6px 12px var(--shadow-dark), -6px -6px 12px var(--shadow-light);
             transform: translateX(10px);
         }
 
         .nav-item:hover::before, .nav-item.active::before {
-            background: var(--primary);
-            box-shadow: 0 0 8px var(--primary);
+            background: var(--primary); box-shadow: 0 0 8px var(--primary);
         }
 
         .nav-item:active {
-            box-shadow: inset 4px 4px 8px var(--shadow-dark),
-                       inset -4px -4px 8px var(--shadow-light);
+            box-shadow: inset 4px 4px 8px var(--shadow-dark), inset -4px -4px 8px var(--shadow-light);
             transform: translateX(5px);
         }
 
         .theme-toggle {
-            width: 55px; height: 55px;
-            border-radius: 16px;
-            background: var(--bg-color);
-            box-shadow: 6px 6px 12px var(--shadow-dark),
-                       -6px -6px 12px var(--shadow-light);
+            width: 55px; height: 55px; border-radius: 16px; background: var(--bg-color);
+            box-shadow: 6px 6px 12px var(--shadow-dark), -6px -6px 12px var(--shadow-light);
             display: flex; justify-content: center; align-items: center;
-            cursor: pointer; font-size: 20px;
-            transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+            cursor: pointer; font-size: 20px; transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
         }
         .theme-toggle:hover { transform: translateY(-5px); }
         .theme-toggle:active { box-shadow: inset 4px 4px 8px var(--shadow-dark), inset -4px -4px 8px var(--shadow-light); transform: translateY(0); }
 
         /* ====== 主内容区 ====== */
         .main-content {
-            margin-left: 280px;
-            padding: 0 4% 80px 4%;
-            max-width: 1400px;
+            margin-left: 280px; padding: 0 4% 80px 4%; max-width: 1400px;
         }
 
-        section {
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            padding: 60px 0;
-        }
+        section { min-height: 100vh; display: flex; flex-direction: column; justify-content: center; padding: 60px 0; }
 
         .section-title {
-            font-size: 32px;
-            font-weight: 900;
-            margin-bottom: 40px;
-            color: var(--text-main);
-            letter-spacing: 1px;
-            display: flex; align-items: center;
+            font-size: 32px; font-weight: 900; margin-bottom: 40px;
+            color: var(--text-main); letter-spacing: 1px; display: flex; align-items: center;
         }
         
         .section-title::after {
-            content: ''; flex-grow: 1; height: 2px;
-            background: var(--shadow-dark); margin-left: 20px;
-            opacity: 0.2; border-radius: 2px;
+            content: ''; flex-grow: 1; height: 2px; background: var(--shadow-dark);
+            margin-left: 20px; opacity: 0.2; border-radius: 2px;
         }
 
         /* 基础拟态外凸卡片 */
         .neo-card {
-            background: var(--bg-color);
-            border-radius: 28px;
-            padding: 40px;
-            box-shadow: 14px 14px 28px var(--shadow-dark),
-                       -14px -14px 28px var(--shadow-light);
-            transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
-            position: relative;
+            background: var(--bg-color); border-radius: 28px; padding: 35px;
+            box-shadow: 14px 14px 28px var(--shadow-dark), -14px -14px 28px var(--shadow-light);
+            transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1); position: relative;
         }
 
         .neo-card:hover {
             transform: translateY(-6px);
-            box-shadow: 20px 20px 40px var(--shadow-dark),
-                       -15px -15px 30px var(--shadow-light);
+            box-shadow: 20px 20px 40px var(--shadow-dark), -15px -15px 30px var(--shadow-light);
         }
 
         /* 基础拟态内凹容器 */
         .neo-inset {
-            background: var(--bg-color);
-            border-radius: 20px;
-            padding: 25px;
-            box-shadow: inset 6px 6px 12px var(--shadow-dark),
-                       inset -6px -6px 12px var(--shadow-light);
+            background: var(--bg-color); border-radius: 20px; padding: 25px;
+            box-shadow: inset 6px 6px 12px var(--shadow-dark), inset -6px -6px 12px var(--shadow-light);
         }
 
         /* ====== 第一屏：主页系统台 ====== */
-        .hero-grid {
-            display: grid;
-            grid-template-columns: 1.2fr 1fr;
-            gap: 40px;
-            align-items: center;
-        }
+        .hero-grid { display: grid; grid-template-columns: 1.3fr 1fr; gap: 40px; align-items: center; }
 
-        .hero-title { font-size: 46px; font-weight: 900; margin-bottom: 10px; }
-        .hero-subtitle { font-size: 18px; color: var(--primary); font-weight: 700; margin-bottom: 25px; }
+        .hero-title { font-size: 46px; font-weight: 900; margin-bottom: 10px; display: flex; align-items: center; gap: 15px;}
         
+        /* 独立超链接样式 */
+        .link-title {
+            color: var(--primary); text-decoration: none; border-bottom: 3px dashed var(--primary);
+            transition: all 0.3s;
+        }
+        .link-title:hover { color: var(--primary-hover); border-bottom-style: solid; text-shadow: 0 0 15px rgba(74, 139, 220, 0.4); }
+
+        .hero-subtitle { font-size: 18px; color: var(--primary); font-weight: 700; margin-bottom: 25px; }
         .hero-text { font-size: 15px; color: var(--text-sub); line-height: 2; margin-bottom: 35px; text-align: justify; }
 
         /* 拟态代码终端 */
         .terminal {
-            background: var(--terminal-bg);
-            border-radius: 20px;
-            padding: 20px;
-            box-shadow: inset 6px 6px 12px var(--shadow-dark),
-                       inset -6px -6px 12px var(--shadow-light);
-            font-family: 'Consolas', monospace;
-            font-size: 13px;
-            color: var(--text-sub);
-            line-height: 1.8;
+            background: var(--terminal-bg); border-radius: 20px; padding: 25px;
+            box-shadow: inset 6px 6px 12px var(--shadow-dark), inset -6px -6px 12px var(--shadow-light);
+            font-family: 'Consolas', monospace; font-size: 13.5px; color: var(--text-sub); line-height: 1.9;
         }
         .terminal span.green { color: #10b981; font-weight: bold;}
         .terminal span.blue { color: var(--primary); font-weight: bold;}
+        .terminal span.mystic { color: var(--mystic); font-weight: bold;}
 
         /* 快捷统计面板 */
-        .stats-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 20px;
-        }
-        .stat-box {
-            text-align: center;
-            padding: 25px 15px;
-        }
+        .stats-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; }
+        .stat-box { text-align: center; padding: 25px 15px; }
         .stat-num { font-size: 28px; font-weight: 900; color: var(--primary); margin-bottom: 5px; }
-        .stat-label { font-size: 13px; font-weight: 600; color: var(--text-sub); }
+        .stat-label { font-size: 13px; font-weight: 600; color: var(--text-sub); line-height: 1.4; }
 
         /* ====== 第二屏：履历档案 (时间轴与经历) ====== */
-        .resume-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 40px;
-        }
+        .resume-grid { display: grid; grid-template-columns: 1fr 1.3fr; gap: 40px; }
         
-        .timeline {
-            border-left: 2px dashed var(--primary);
-            padding-left: 25px;
-            margin-left: 15px;
-            display: flex; flex-direction: column; gap: 30px;
-        }
+        .timeline-container { max-height: 600px; overflow-y: auto; padding-right: 15px; padding-top: 10px; }
+        /* 隐藏时间轴滚动条但保留功能 */
+        .timeline-container::-webkit-scrollbar { width: 6px; }
+        .timeline-container::-webkit-scrollbar-thumb { background: var(--shadow-dark); border-radius: 10px; }
+
+        .timeline { border-left: 2px dashed var(--primary); padding-left: 25px; margin-left: 10px; display: flex; flex-direction: column; gap: 35px; }
         .timeline-item { position: relative; }
         .timeline-item::before {
-            content: ''; position: absolute;
-            left: -33px; top: 0;
-            width: 14px; height: 14px; border-radius: 50%;
-            background: var(--primary);
-            box-shadow: 0 0 10px var(--primary);
+            content: ''; position: absolute; left: -33px; top: 0; width: 14px; height: 14px; border-radius: 50%;
+            background: var(--bg-color); border: 3px solid var(--primary); box-shadow: 0 0 10px var(--primary);
         }
-        .time-date { font-size: 12px; color: var(--primary); font-weight: 800; margin-bottom: 8px; }
-        .time-title { font-size: 18px; font-weight: 800; margin-bottom: 8px; color: var(--text-main); }
-        .time-desc { font-size: 14px; color: var(--text-sub); line-height: 1.8; }
+        .time-date { font-size: 13px; color: var(--primary); font-weight: 800; margin-bottom: 8px; display: inline-block; background: rgba(74,139,220,0.1); padding: 2px 10px; border-radius: 10px;}
+        .time-title { font-size: 17px; font-weight: 800; margin-bottom: 8px; color: var(--text-main); }
+        .time-desc { font-size: 13.5px; color: var(--text-sub); line-height: 1.8; }
 
         /* ====== 第三屏：底层架构与技术栈 ====== */
-        .skills-container {
-            display: grid; grid-template-columns: 1fr 1.2fr; gap: 40px;
-        }
+        .skills-container { display: grid; grid-template-columns: 1fr 1.1fr; gap: 40px; }
         
         .skill-item { margin-bottom: 25px; }
         .skill-item:last-child { margin-bottom: 0; }
         .skill-info { display: flex; justify-content: space-between; font-size: 14px; font-weight: 700; margin-bottom: 12px; }
-        .progress-bg {
-            height: 16px; border-radius: 16px; background: var(--bg-color);
-            box-shadow: inset 4px 4px 8px var(--shadow-dark), inset -4px -4px 8px var(--shadow-light); padding: 3px;
-        }
-        .progress-fill {
-            height: 100%; border-radius: 10px; background: var(--primary);
-            width: 0; transition: width 1.5s cubic-bezier(0.1, 0.5, 0.2, 1);
-        }
+        .progress-bg { height: 14px; border-radius: 14px; background: var(--bg-color); box-shadow: inset 4px 4px 8px var(--shadow-dark), inset -4px -4px 8px var(--shadow-light); padding: 3px; }
+        .progress-fill { height: 100%; border-radius: 10px; background: var(--primary); width: 0; transition: width 1.5s cubic-bezier(0.1, 0.5, 0.2, 1); }
 
         /* 标签矩阵 */
-        .tags-matrix { display: flex; flex-wrap: wrap; gap: 15px; }
+        .tags-matrix { display: flex; flex-wrap: wrap; gap: 12px; }
         .neo-tag {
-            padding: 10px 18px; border-radius: 12px; font-size: 13px; font-weight: 700;
-            color: var(--text-main); background: var(--bg-color);
-            box-shadow: 5px 5px 10px var(--shadow-dark), -5px -5px 10px var(--shadow-light);
-            transition: all 0.3s; cursor: default;
+            padding: 8px 16px; border-radius: 12px; font-size: 13px; font-weight: 700; color: var(--text-main); background: var(--bg-color);
+            box-shadow: 5px 5px 10px var(--shadow-dark), -5px -5px 10px var(--shadow-light); transition: all 0.3s; cursor: default;
         }
-        .neo-tag:hover {
-            color: var(--primary);
-            box-shadow: inset 3px 3px 6px var(--shadow-dark), inset -3px -3px 6px var(--shadow-light);
-        }
+        .neo-tag:hover { color: var(--primary); box-shadow: inset 3px 3px 6px var(--shadow-dark), inset -3px -3px 6px var(--shadow-light); transform: scale(0.95); }
+        .neo-tag.mystic:hover { color: var(--mystic); }
 
         /* ====== 第四屏：核心部署项目 ====== */
-        .projects-grid {
-            display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 35px;
-        }
-        .project-card {
-            display: flex; flex-direction: column; height: 100%;
-            text-decoration: none; padding: 35px;
-        }
-        .project-card:active {
-            box-shadow: inset 6px 6px 12px var(--shadow-dark), inset -6px -6px 12px var(--shadow-light);
-            transform: scale(0.97);
-        }
-        .project-status {
-            font-size: 12px; font-weight: 800; padding: 5px 12px; border-radius: 8px;
-            width: max-content; margin-bottom: 15px;
-        }
+        .projects-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 35px; }
+        .project-card { display: flex; flex-direction: column; height: 100%; text-decoration: none; padding: 35px; }
+        .project-card:active { box-shadow: inset 6px 6px 12px var(--shadow-dark), inset -6px -6px 12px var(--shadow-light); transform: scale(0.97); }
+        
+        .project-status { font-size: 12px; font-weight: 800; padding: 5px 12px; border-radius: 8px; width: max-content; margin-bottom: 15px; }
         .status-run { background: rgba(16, 185, 129, 0.15); color: #10b981; }
         .status-dev { background: rgba(74, 139, 220, 0.15); color: var(--primary); }
         .status-plan { background: rgba(245, 158, 11, 0.15); color: #f59e0b; }
@@ -315,44 +237,42 @@
             display: block; width: 100%; padding: 22px; margin-top: 50px;
             border-radius: 20px; background: var(--primary); color: #fff;
             text-align: center; text-decoration: none; font-size: 16px; font-weight: 900; letter-spacing: 3px;
-            box-shadow: 10px 10px 20px rgba(74, 139, 220, 0.3), -10px -10px 20px var(--shadow-light);
-            transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+            box-shadow: 10px 10px 20px rgba(74, 139, 220, 0.3), -10px -10px 20px var(--shadow-light); transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
         }
         .sys-btn:hover { transform: translateY(-5px); box-shadow: 15px 15px 30px rgba(74, 139, 220, 0.4); }
         .sys-btn:active { transform: scale(0.98); box-shadow: inset 5px 5px 10px rgba(0,0,0,0.2); }
 
         /* ====== 滚动渐显动画 ====== */
-        .fade-up {
-            opacity: 0; transform: translateY(50px);
-            transition: opacity 0.8s ease, transform 0.8s cubic-bezier(0.34, 1.56, 0.64, 1);
-        }
+        .fade-up { opacity: 0; transform: translateY(40px); transition: opacity 0.8s ease, transform 0.8s cubic-bezier(0.34, 1.56, 0.64, 1); }
         .fade-up.visible { opacity: 1; transform: translateY(0); }
         .delay-1 { transition-delay: 0.1s; }
         .delay-2 { transition-delay: 0.2s; }
 
         /* ====== 响应式 ====== */
         @media (max-width: 1024px) {
-            .sidebar { width: 100%; height: auto; position: static; flex-direction: row; padding: 20px 5%; align-items: center; border-radius: 0 0 30px 30px; }
-            .avatar-wrap { margin-bottom: 0; width: 60px; height: 60px; }
+            .sidebar { width: 100%; height: auto; position: static; flex-direction: row; padding: 20px 5%; align-items: center; border-radius: 0 0 30px 30px; box-shadow: 0 10px 30px rgba(0,0,0,0.05); z-index: 999;}
+            .avatar-wrap { margin-bottom: 0; width: 55px; height: 55px; }
             .nav-links { display: none; }
-            .main-content { margin-left: 0; padding: 0 5% 50px 5%; }
+            .main-content { margin-left: 0; padding: 40px 5% 50px 5%; }
             .hero-grid, .resume-grid, .skills-container { grid-template-columns: 1fr; }
+            .terminal { font-size: 12px; }
             section { padding: 40px 0; min-height: auto; }
             .section-title { font-size: 26px; }
+            .timeline-container { max-height: none; overflow-y: visible;}
         }
     </style>
 </head>
 <body>
 
     <nav class="sidebar">
-        <div class="avatar-wrap">
+        <a href="https://www.niekaixiang.com" target="_blank" class="avatar-wrap" title="访问 聶.NET">
             <img src="https://img.i8-mc.cn/file/J0NJk8wH.jpeg" alt="NKX Avatar">
-        </div>
+        </a>
         <div class="nav-links">
             <a href="#console" class="nav-item active">控制中心 (Console)</a>
-            <a href="#resume" class="nav-item">档案履历 (Profile)</a>
-            <a href="#infrastructure" class="nav-item">底层架构 (Stack)</a>
-            <a href="#deployments" class="nav-item">节点部署 (Nodes)</a>
+            <a href="#resume" class="nav-item">进阶纪元 (Timeline)</a>
+            <a href="#infrastructure" class="nav-item">架构与协议 (Stack)</a>
+            <a href="#deployments" class="nav-item">核心部署 (Deploy)</a>
         </div>
         <div class="theme-toggle" id="theme-btn" title="切换深浅色">🌓</div>
     </nav>
@@ -362,69 +282,94 @@
         <section id="console">
             <div class="hero-grid">
                 <div class="fade-up">
-                    <h1 class="hero-title">聂凯翔</h1>
-                    <div class="hero-subtitle">独立开发者 / IDC 架构玩家</div>
+                    <h1 class="hero-title">
+                        聂凯翔 <span style="color: var(--text-sub); font-size: 24px; font-weight: 500;">/</span>
+                        <a href="https://www.niekaixiang.com" target="_blank" class="link-title">聶.NET</a>
+                    </h1>
+                    <div class="hero-subtitle">IDC 架构玩家 / 服务器折腾党</div>
                     <p class="hero-text">
-                        你好，我是00后服务器“洋垃圾”抚养员。相比于满屏的 AI 生成代码，我更享受手指敲击键盘呼出终端界面的顿挫感。日常热衷于给 <strong>戴尔R620</strong> 更换硅脂，在 <strong>超微主板</strong> 上压榨 PVE 虚拟化集群的最后一丝性能。
+                        你好，我是00后全栈开机商与底层运维发烧友。比起枯燥的课本，我更享受在各种 LGA 3647 准系统上压榨虚拟化性能的快感，以及用终端字符构建属于自己的网络生态。
                     </p>
                     <div class="terminal">
                         <span class="green">nkx@root</span>:<span class="blue">~</span># neofetch<br>
-                        OS: Debian 12 (Bookworm) x86_64<br>
-                        Kernel: Linux 6.1.0-server<br>
-                        Uptime: 18 years<br>
-                        Status: <span class="green">Online [blog.i8-mc.cn]</span><br>
+                        OS: Debian / RedHat 系 Linux<br>
+                        Virt: PVE / ESXi / KVM / Hyper-V<br>
+                        Status: <span class="green">Online [www.niekaixiang.com]</span><br>
+                        Proxy: <span class="mystic">Vless / Hysteria II / TUIC</span><br>
                         <span class="green">nkx@root</span>:<span class="blue">~</span># _ <span style="animation: blink 1s infinite;">█</span>
                     </div>
                 </div>
                 
                 <div class="stats-grid fade-up delay-1">
                     <div class="neo-card stat-box">
+                        <div class="stat-num">500+</div>
+                        <div class="stat-label">累计注册客户</div>
+                    </div>
+                    <div class="neo-card stat-box">
                         <div class="stat-num">2026</div>
-                        <div class="stat-label">毕业/冲刺本科学历</div>
+                        <div class="stat-label">专升本/C1驾照计划</div>
                     </div>
                     <div class="neo-card stat-box">
-                        <div class="stat-num">C1</div>
-                        <div class="stat-label">驾照备考目标</div>
+                        <div class="stat-num">18</div>
+                        <div class="stat-label">岁 (已成年准备脱单?)</div>
                     </div>
                     <div class="neo-card stat-box">
-                        <div class="stat-num">99%</div>
-                        <div class="stat-label">服务节点可用性</div>
-                    </div>
-                    <div class="neo-card stat-box">
-                        <div class="stat-num">v1.3</div>
-                        <div class="stat-label">NIE 博客系统版本</div>
+                        <div class="stat-num" style="color: #10b981;">100%</div>
+                        <div class="stat-label">折腾与求知欲</div>
                     </div>
                 </div>
             </div>
         </section>
 
         <section id="resume">
-            <h2 class="section-title fade-up">档案履历</h2>
+            <h2 class="section-title fade-up">进阶纪元</h2>
             <div class="resume-grid">
                 
                 <div class="neo-card fade-up">
-                    <h3 style="margin-bottom: 25px; color: var(--primary);">[ 学术与教育 ]</h3>
+                    <h3 style="margin-bottom: 25px; color: var(--primary);">[ 当前状态 ]</h3>
                     <div class="neo-inset">
                         <div style="font-size: 18px; font-weight: 800; margin-bottom: 8px;">福建信息职业技术学院</div>
                         <div style="font-size: 14px; font-weight: 600; color: var(--text-sub); margin-bottom: 15px;">计算机应用技术 | 大一在读</div>
-                        <p style="font-size: 14px; line-height: 1.8; color: var(--text-sub);">
-                            目前处于大一阶段，正在系统性夯实计算机网络与应用底层技术。在日常的学术任务之外，绝大部分精力投入到了真实环境的 IDC 服务器硬件运维、Linux 网络架构规划以及各类开源项目的自动化部署测试中。
+                        <p style="font-size: 14.5px; line-height: 1.8; color: var(--text-sub);">
+                            日常除了专业课程的系统性学习，我的课余时间几乎全部浸泡在服务器的轰鸣声中。今年刚好18岁成年，近期的核心目标是：<strong style="color:var(--text-main)">创办福建省苏辰互联有限公司、一次性考取C1驾照、筹备专升本、维护 聶.NET 博客，以及...找个对象？</strong>
                         </p>
                     </div>
                 </div>
 
                 <div class="neo-card fade-up delay-1">
-                    <h3 style="margin-bottom: 25px; color: var(--primary);">[ 实践与进阶 ]</h3>
-                    <div class="timeline">
-                        <div class="timeline-item">
-                            <div class="time-date">2025.09 - 2025.12</div>
-                            <div class="time-title">信息设备维护实习</div>
-                            <div class="time-desc">于工作室完成硬件设备级维修、系统排错与网络基础配置的实战工作，积累了大量底层硬件除错经验。</div>
-                        </div>
-                        <div class="timeline-item">
-                            <div class="time-date">Active (筹备中)</div>
-                            <div class="time-title">福建苏辰网络科技</div>
-                            <div class="time-desc">作为创始人正在筹建的企业项目，主攻企业级反向代理、边缘节点加速分发、以及底层数据中心网络架构解决方案。</div>
+                    <h3 style="margin-bottom: 20px; color: var(--primary);">[ 开机商之路 ]</h3>
+                    <div class="timeline-container">
+                        <div class="timeline">
+                            <div class="timeline-item">
+                                <div class="time-date">2026 年 (Now)</div>
+                                <div class="time-title">成年与新征程</div>
+                                <div class="time-desc">计划创办福建省苏辰互联有限公司，持续学习新技术栈，并维护重构我的个人博客架构。</div>
+                            </div>
+                            <div class="timeline-item">
+                                <div class="time-date">2025 年</div>
+                                <div class="time-title">海外布局与网络进阶</div>
+                                <div class="time-desc">开始布局海外服务节点，同时深入学习思科(Cisco)与华为(Huawei)模拟器的企业级网络配置。</div>
+                            </div>
+                            <div class="timeline-item">
+                                <div class="time-date">2023 年</div>
+                                <div class="time-title">全自动开机与硬件狂飙</div>
+                                <div class="time-desc">注册客户达到 500+。全面建设 IDC 财务与主控系统，实现全自动开机。疯狂购入浪潮 SA5112M5、联想 HR630 等多台 LGA 3647 平台准系统。</div>
+                            </div>
+                            <div class="timeline-item">
+                                <div class="time-date">2022 年</div>
+                                <div class="time-title">四子星准系统</div>
+                                <div class="time-desc">客户量突破 200 人大关。为满足算力需求，购入了一台硬核的 Supermicro X9DRT-HF 2U四子星准系统。</div>
+                            </div>
+                            <div class="timeline-item">
+                                <div class="time-date">2021 年</div>
+                                <div class="time-title">配置全面升级</div>
+                                <div class="time-desc">业务稳步增长，客户达到 120 人，完成了核心服务器配置的全面换代升级。</div>
+                            </div>
+                            <div class="timeline-item">
+                                <div class="time-date">2020 年 5 月</div>
+                                <div class="time-title">梦开始的地方</div>
+                                <div class="time-desc">在父母的全力支持下，获得了人生第一台 Dell R620 服务器，正式开启了售卖 VPS 的折腾之路。</div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -433,39 +378,48 @@
         </section>
 
         <section id="infrastructure">
-            <h2 class="section-title fade-up">底层架构栈</h2>
+            <h2 class="section-title fade-up">架构与协议栈</h2>
             <div class="skills-container">
                 
                 <div class="neo-card fade-up">
+                    <h3 style="margin-bottom: 25px; font-size: 16px;">Core Infrastructure</h3>
                     <div class="skill-item">
-                        <div class="skill-info"><span>Linux 操作系统 (Debian / RHEL)</span><span>95%</span></div>
+                        <div class="skill-info"><span>Linux (Debian / RedHat 系安装与排错)</span><span>95%</span></div>
                         <div class="progress-bg"><div class="progress-fill" data-width="95%"></div></div>
                     </div>
                     <div class="skill-item">
-                        <div class="skill-info"><span>Proxmox VE (PVE) 底层虚拟化</span><span>90%</span></div>
+                        <div class="skill-info"><span>虚拟化集群 (PVE / ESXi / KVM / Hyper-V)</span><span>90%</span></div>
                         <div class="progress-bg"><div class="progress-fill" data-width="90%"></div></div>
                     </div>
                     <div class="skill-item">
-                        <div class="skill-info"><span>Dell R620 / Supermicro 硬件级运维</span><span>85%</span></div>
+                        <div class="skill-info"><span>企业级网络 (华为/思科交换机与路由配置)</span><span>85%</span></div>
                         <div class="progress-bg"><div class="progress-fill" data-width="85%"></div></div>
                     </div>
                     <div class="skill-item">
-                        <div class="skill-info"><span>Telegram Bot 高并发自动化开发</span><span>80%</span></div>
+                        <div class="skill-info"><span>编程与开发 (Python / Java / Web前端)</span><span>80%</span></div>
                         <div class="progress-bg"><div class="progress-fill" data-width="80%"></div></div>
                     </div>
                 </div>
 
                 <div class="neo-card fade-up delay-1">
-                    <h3 style="margin-bottom: 25px; font-size: 16px;">工具链与中间件库</h3>
+                    <h3 style="margin-bottom: 20px; font-size: 16px;">IDC、云生态 & 代理协议</h3>
                     <div class="tags-matrix">
-                        <div class="neo-tag">Nginx 反向代理集群</div>
-                        <div class="neo-tag">Docker / 容器化部署</div>
-                        <div class="neo-tag">Oracle Cloud (ARM架构)</div>
-                        <div class="neo-tag">Markdown 渲染引擎开发</div>
-                        <div class="neo-tag">UI 框架拟态设计</div>
-                        <div class="neo-tag">Telegram API 对接</div>
-                        <div class="neo-tag">BASH 自动化脚本</div>
-                        <div class="neo-tag">CDN 节点配置</div>
+                        <div class="neo-tag">WHMCS</div>
+                        <div class="neo-tag">IDCsmart</div>
+                        <div class="neo-tag">ProKVM</div>
+                        <div class="neo-tag">ZKeys</div>
+                        <div class="neo-tag">CloudFlare 生态</div>
+                        <div class="neo-tag">Amazon Cloud</div>
+                        <div class="neo-tag">Tencent Cloud</div>
+                        <div class="neo-tag">Vercel</div>
+                        <div class="neo-tag">GitHub Pages</div>
+                        <div class="neo-tag">Workers</div>
+                        <div class="neo-tag">CDN 节点搭建</div>
+                        <div class="neo-tag mystic" title="神秘代理技能">Vless</div>
+                        <div class="neo-tag mystic" title="神秘代理技能">Hysteria II</div>
+                        <div class="neo-tag mystic" title="神秘代理技能">TUIC</div>
+                        <div class="neo-tag mystic" title="神秘代理技能">VMess</div>
+                        <div class="neo-tag mystic" title="神秘代理技能">Shadowsocks</div>
                     </div>
                 </div>
 
@@ -473,31 +427,31 @@
         </section>
 
         <section id="deployments">
-            <h2 class="section-title fade-up">核心节点部署</h2>
+            <h2 class="section-title fade-up">核心部署</h2>
             <div class="projects-grid">
                 
-                <a href="https://blog.i8-mc.cn" target="_blank" class="neo-card project-card fade-up">
-                    <div class="project-status status-dev">持续迭代中 (v1.3.4)</div>
-                    <h3>NIE Blog System</h3>
-                    <p>抛弃臃肿的传统开源框架，从零独立重构开发的客制化博客系统。纯手工打造极简极客 UI，深度集成了高效的 Markdown 渲染引擎与数据统计面板，目前稳定承载主站流量。</p>
+                <a href="https://www.niekaixiang.com" target="_blank" class="neo-card project-card fade-up">
+                    <div class="project-status status-dev">持续迭代开发</div>
+                    <h3><span style="color:var(--primary);">[ 博客 ]</span> 聶.NET</h3>
+                    <p>重构与维护的独立博客系统。具备客制化 UI 与 Markdown 渲染，承载个人技术输出、运维日志与建站经验分享，域名直达 niekaixiang.com。</p>
                 </a>
 
                 <div class="neo-card project-card fade-up delay-1" style="cursor: default;">
-                    <div class="project-status status-run">24H 守护运行</div>
-                    <h3>Oracle ARM 自动化监控 Bot</h3>
-                    <p>针对甲骨文 (Oracle Cloud) 凤凰城高需求 ARM 资源实例开发的并发利器。深度对接 Telegram 机器人底层接口，实现自部署无服务器依赖的全天候自动化抢占与警报。</p>
+                    <div class="project-status status-plan">筹备与测试中</div>
+                    <h3><span style="color:var(--primary);">[ 企业 ]</span> 苏辰互联有限公司</h3>
+                    <p>计划于2026年正式创立的IDC企业。将整合过往多年的开机商经验，结合 WHMCS/IDCsmart 财务与 ProKVM 主控，提供全自动化的虚拟化服务器与高可用网络服务。</p>
                 </div>
 
                 <div class="neo-card project-card fade-up delay-2" style="cursor: default;">
-                    <div class="project-status status-plan">架构筹备中</div>
-                    <h3>苏辰网络 - 全局反代分发网</h3>
-                    <p>基于底层多台高配服务器建立的企业级测试项目，利用多层 Nginx 反向代理实现业务的高可用分发与灾备，核心节点服务现已挂载于 blog.i8-mc.cn 进行连通性压测。</p>
+                    <div class="project-status status-run">底层自动化</div>
+                    <h3><span style="color:var(--primary);">[ 脚本 ]</span> Oracle ARM Bot</h3>
+                    <p>针对甲骨文高需求计算资源开发的 Telegram 监控与抢占机器人，结合 CloudFlare 生态与云端脚本，实现全天候无服务器依赖的高并发调用。</p>
                 </div>
 
             </div>
 
             <div class="fade-up" style="margin-top: 20px;">
-                <a href="https://blog.i8-mc.cn" class="sys-btn">验证身份并载入主干网络 ➔</a>
+                <a href="https://www.niekaixiang.com" target="_blank" class="sys-btn">进入 聶.NET 主干网络 ➔</a>
             </div>
         </section>
 
@@ -525,10 +479,8 @@
         const observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
-                    // 卡片渐显
                     entry.target.classList.add('visible');
                     
-                    // 技能条增长动画触发
                     if(entry.target.querySelector('.progress-fill')) {
                         setTimeout(() => {
                             entry.target.querySelectorAll('.progress-fill').forEach(bar => {
