@@ -3,411 +3,499 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>聂凯翔 (NKX) - 控制台</title>
+    <title>聂凯翔 - 个人终端</title>
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;700;900&display=swap" rel="stylesheet">
     <style>
         :root {
-            /* 极度柔和的背景色与阴影色，减少生硬的黑白对比 */
-            --bg-color: #e6ebee;
-            --text-main: #374151;
-            --text-sub: #6b7280;
-            --shadow-dark: rgba(156, 163, 175, 0.6);
-            --shadow-light: rgba(255, 255, 255, 0.95);
-            /* Google 标志性的圆润克莱因蓝 */
-            --primary: #4285f4;
-            --primary-hover: #2b6cb0;
+            /* 高级拟态底色：极光白（带微弱冷蓝调，最显干净） */
+            --bg-color: #eef0f5;
+            --text-main: #2d3748;
+            --text-sub: #718096;
+            
+            /* 阴影：高光更白，暗部更柔和，极大提升高级感 */
+            --shadow-dark: rgba(166, 180, 200, 0.55);
+            --shadow-light: rgba(255, 255, 255, 1);
+            
+            /* 点缀色：科技蓝 */
+            --primary: #4a8bdc;
+            --primary-hover: #3572bf;
         }
 
         * {
             box-sizing: border-box;
             margin: 0;
             padding: 0;
-            /* 赋予全剧极其丝滑的果冻阻尼过渡感 */
-            transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+            font-family: 'Noto Sans SC', 'PingFang SC', 'Microsoft YaHei', sans-serif;
             -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
         }
 
         body {
             background-color: var(--bg-color);
             color: var(--text-main);
-            /* 优先调用 Google 原生英文字体，中文使用 Noto Sans SC */
-            font-family: 'Google Sans', 'Product Sans', 'Noto Sans SC', system-ui, -apple-system, sans-serif;
+            min-height: 100vh;
             display: flex;
             justify-content: center;
             align-items: center;
-            min-height: 100vh;
-            padding: 2.5vh 2vw; 
+            padding: 40px 20px;
             overflow-x: hidden;
-            line-height: 1.6;
         }
 
-        /* 铺满屏幕的柔和外框 */
-        .dashboard {
+        /* ====== 核心布局：动态自适应网格 ====== */
+        .dashboard-container {
             width: 100%;
-            max-width: 1600px;
-            min-height: 95vh;
-            border-radius: 40px;
-            background: var(--bg-color);
-            box-shadow: 20px 20px 50px var(--shadow-dark),
-                       -20px -20px 50px var(--shadow-light);
-            padding: 40px;
+            max-width: 1300px;
             display: grid;
-            grid-template-columns: repeat(12, 1fr);
-            gap: 35px;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 30px;
+            /* 整体入场动画 */
+            animation: fadeIn 0.8s ease-out forwards;
         }
 
-        /* 基础面板：超大圆角，丝滑外凸 */
-        .panel {
+        /* 动画：平滑浮现 */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* 赋予不同模块不同的延迟时间，错落有致 */
+        .delay-1 { animation-delay: 0.1s; }
+        .delay-2 { animation-delay: 0.2s; }
+        .delay-3 { animation-delay: 0.3s; }
+        .delay-4 { animation-delay: 0.4s; }
+
+        /* ====== 拟态卡片基础类 ====== */
+        .neo-card {
             background: var(--bg-color);
-            border-radius: 32px;
+            border-radius: 28px;
             padding: 35px;
-            box-shadow: 12px 12px 24px var(--shadow-dark),
-                       -12px -12px 24px var(--shadow-light);
+            /* 极其柔和的超大半径阴影 */
+            box-shadow: 18px 18px 36px var(--shadow-dark),
+                       -18px -18px 36px var(--shadow-light);
+            transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+            opacity: 0; /* 配合入场动画 */
+            animation: fadeIn 0.8s ease-out forwards;
+        }
+
+        /* 悬浮微动效：卡片轻微上浮，阴影扩散 */
+        .neo-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 25px 25px 50px var(--shadow-dark),
+                       -20px -20px 40px var(--shadow-light);
+        }
+
+        /* 内凹面板：用于承载内容 */
+        .neo-inset {
+            background: var(--bg-color);
+            border-radius: 20px;
+            padding: 25px;
+            box-shadow: inset 7px 7px 15px var(--shadow-dark),
+                       inset -7px -7px 15px var(--shadow-light);
+        }
+
+        /* ====== 模块1：个人名片 (跨两行) ====== */
+        .profile-card {
+            grid-row: span 2;
             display: flex;
             flex-direction: column;
-        }
-
-        /* 基础凹陷面板：用于包裹内容 */
-        .inset-box {
-            background: var(--bg-color);
-            border-radius: 24px;
-            padding: 25px;
-            box-shadow: inset 8px 8px 16px var(--shadow-dark),
-                       inset -8px -8px 16px var(--shadow-light);
-        }
-
-        .panel-title {
-            font-size: 20px;
-            font-weight: 800;
-            margin-bottom: 25px;
-            display: flex;
-            align-items: center;
-            color: var(--text-main);
-            letter-spacing: 0.5px;
-        }
-
-        .panel-title::before {
-            content: '';
-            display: block;
-            width: 12px;
-            height: 12px;
-            border-radius: 50%;
-            background: var(--primary);
-            margin-right: 12px;
-            box-shadow: 0 0 12px var(--primary);
-        }
-
-        /* ================= 左侧：个人名片 (跨3列，跨2行) ================= */
-        .profile {
-            grid-column: span 3;
-            grid-row: span 2;
             align-items: center;
             text-align: center;
-            justify-content: center;
+            position: relative;
         }
 
-        .avatar {
-            width: 150px;
-            height: 150px;
+        /* 创新动画：头像雷达波纹 */
+        .avatar-wrapper {
+            position: relative;
+            width: 140px;
+            height: 140px;
+            margin-bottom: 25px;
             border-radius: 50%;
             background: var(--bg-color);
             box-shadow: 10px 10px 20px var(--shadow-dark),
                        -10px -10px 20px var(--shadow-light);
-            margin: 0 auto 30px;
             display: flex;
             justify-content: center;
             align-items: center;
-            font-size: 42px;
-            font-weight: 900;
-            color: var(--primary);
-            position: relative;
+            z-index: 2;
         }
 
-        .avatar::after {
+        .avatar-wrapper::before, .avatar-wrapper::after {
             content: '';
             position: absolute;
-            top: 10px; left: 10px; right: 10px; bottom: 10px;
+            top: 50%; left: 50%;
+            transform: translate(-50%, -50%);
+            width: 100%; height: 100%;
             border-radius: 50%;
-            box-shadow: inset 4px 4px 8px var(--shadow-dark),
-                       inset -4px -4px 8px var(--shadow-light);
+            border: 2px solid var(--primary);
+            opacity: 0;
+            z-index: -1;
+        }
+
+        .avatar-wrapper::before { animation: radar 3s infinite linear; }
+        .avatar-wrapper::after { animation: radar 3s infinite linear 1.5s; }
+
+        @keyframes radar {
+            0% { width: 100%; height: 100%; opacity: 0.6; }
+            100% { width: 160%; height: 160%; opacity: 0; }
+        }
+
+        .avatar-img {
+            width: 116px;
+            height: 116px;
+            border-radius: 50%;
+            object-fit: cover;
+            box-shadow: inset 4px 4px 8px rgba(0,0,0,0.2);
+            z-index: 10;
         }
 
         .name {
             font-size: 28px;
             font-weight: 900;
-            margin-bottom: 8px;
-            letter-spacing: 1px;
+            color: var(--text-main);
+            margin-bottom: 10px;
+            letter-spacing: 2px;
         }
 
-        .role {
+        /* 创新动画：打字机效果头衔 */
+        .typewriter {
             font-size: 14px;
-            color: var(--primary);
             font-weight: 700;
-            margin-bottom: 25px;
-            background: rgba(66, 133, 244, 0.1);
-            padding: 6px 16px;
-            border-radius: 20px;
+            color: var(--primary);
+            margin-bottom: 30px;
             display: inline-block;
+            border-right: 2px solid var(--primary);
+            white-space: nowrap;
+            overflow: hidden;
+            animation: typing 3.5s steps(30, end), blink-caret .75s step-end infinite;
         }
+
+        @keyframes typing { from { width: 0 } to { width: 155px } }
+        @keyframes blink-caret { from, to { border-color: transparent } 50% { border-color: var(--primary); } }
 
         .status-list {
             width: 100%;
             text-align: left;
-            margin-top: 20px;
+            margin-top: auto;
         }
 
         .status-item {
-            margin-bottom: 15px;
             font-size: 13px;
             color: var(--text-sub);
             font-weight: 500;
+            margin-bottom: 15px;
             display: flex;
             align-items: center;
         }
+        
+        .status-item:last-child { margin-bottom: 0; }
 
-        .status-item i {
-            display: inline-block;
-            width: 8px;
-            height: 8px;
+        /* 呼吸灯效果 */
+        .status-dot {
+            width: 8px; height: 8px;
             border-radius: 50%;
+            margin-right: 12px;
             background: #10b981;
+            box-shadow: 0 0 8px #10b981;
+            animation: pulse 2s infinite;
+        }
+
+        .status-dot.warn { background: #f59e0b; box-shadow: 0 0 8px #f59e0b; }
+        .status-dot.info { background: var(--primary); box-shadow: 0 0 8px var(--primary); }
+
+        @keyframes pulse {
+            0% { transform: scale(0.95); opacity: 0.8; }
+            50% { transform: scale(1.3); opacity: 1; }
+            100% { transform: scale(0.95); opacity: 0.8; }
+        }
+
+        /* ====== 通用标题 ====== */
+        .section-title {
+            font-size: 18px;
+            font-weight: 800;
+            color: var(--text-main);
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+        }
+        .section-title::before {
+            content: '';
+            display: inline-block;
+            width: 6px; height: 18px;
+            background: var(--primary);
+            border-radius: 4px;
             margin-right: 12px;
         }
 
-        .status-item.offline i { background: #f59e0b; }
-
-        /* ================= 中间：自我介绍 (跨9列) ================= */
-        .about {
-            grid-column: span 9;
+        /* ====== 模块2：关于我 (跨两列) ====== */
+        .about-card {
+            grid-column: span 2;
         }
-
-        .about p {
-            font-size: 15px;
-            line-height: 2;
+        .about-text p {
+            font-size: 14.5px;
+            line-height: 2.1;
             color: var(--text-sub);
-            margin-bottom: 18px;
+            margin-bottom: 15px;
             font-weight: 500;
+            text-align: justify;
         }
-
-        .about p strong {
-            color: var(--text-main);
+        .about-text strong {
+            color: var(--primary);
             font-weight: 700;
         }
 
-        /* ================= 下方左：技能大盘 (跨5列) ================= */
-        .skills {
-            grid-column: span 4;
+        /* ====== 模块3：底层技术栈 ====== */
+        .skill-group {
+            display: flex;
+            flex-direction: column;
+            gap: 18px;
         }
-
-        .skill-item { margin-bottom: 22px; }
-        .skill-item:last-child { margin-bottom: 0; }
-        
-        .skill-info {
+        .skill-item {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+        .skill-name {
+            font-size: 13px;
+            font-weight: 700;
+            color: var(--text-main);
             display: flex;
             justify-content: space-between;
-            font-size: 14px;
-            margin-bottom: 10px;
-            font-weight: 700;
-            color: var(--text-main);
         }
-
-        .bar-bg {
-            height: 16px;
-            border-radius: 16px;
+        .bar-out {
+            height: 12px;
+            border-radius: 10px;
             background: var(--bg-color);
             box-shadow: inset 4px 4px 8px var(--shadow-dark),
                        inset -4px -4px 8px var(--shadow-light);
-            overflow: hidden;
-            padding: 3px;
+            padding: 2px;
         }
-
-        .bar-fill {
+        .bar-in {
             height: 100%;
-            border-radius: 10px;
-            background: var(--primary);
-            width: 0; /* JS动画初始化 */
+            border-radius: 8px;
+            background: linear-gradient(90deg, #6ba5eb, var(--primary));
+            width: 0; /* JS动画控制 */
             transition: width 1.5s cubic-bezier(0.1, 0.5, 0.2, 1);
             position: relative;
+            overflow: hidden;
+        }
+        /* 进度条流动光泽 */
+        .bar-in::after {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; bottom: 0; right: 0;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+            animation: flow 2s infinite;
+        }
+        @keyframes flow {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
         }
 
-        /* ================= 下方右：项目与经历 (跨5列) ================= */
-        .projects {
-            grid-column: span 5;
+        /* ====== 模块4：项目与部署 ====== */
+        .project-list {
             display: flex;
             flex-direction: column;
             gap: 20px;
         }
-
-        .project-card {
-            padding: 20px 24px;
-            border-radius: 20px;
+        .project-item {
+            padding: 20px;
+            border-radius: 18px;
             background: var(--bg-color);
-            box-shadow: 6px 6px 12px var(--shadow-dark),
-                       -6px -6px 12px var(--shadow-light);
+            box-shadow: 7px 7px 14px var(--shadow-dark),
+                       -7px -7px 14px var(--shadow-light);
             text-decoration: none;
-            display: flex;
-            flex-direction: column;
-            position: relative;
+            color: inherit;
+            display: block;
+            transition: all 0.2s ease;
         }
-
-        .project-card:hover {
-            box-shadow: inset 4px 4px 8px var(--shadow-dark),
-                       inset -4px -4px 8px var(--shadow-light);
+        /* 按下时真实凹陷手感 */
+        .project-item:active {
+            box-shadow: inset 5px 5px 10px var(--shadow-dark),
+                       inset -5px -5px 10px var(--shadow-light);
             transform: scale(0.98);
         }
-
-        .project-card h4 {
-            font-size: 16px;
-            font-weight: 800;
-            margin-bottom: 6px;
-            color: var(--text-main);
+        .project-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 8px;
         }
-
-        .project-card p {
+        .project-title {
+            font-size: 15px;
+            font-weight: 800;
+        }
+        .tag {
+            font-size: 11px;
+            padding: 4px 10px;
+            border-radius: 8px;
+            font-weight: 700;
+        }
+        .tag-active { background: rgba(74, 139, 220, 0.15); color: var(--primary); }
+        .tag-run { background: rgba(16, 185, 129, 0.15); color: #10b981; }
+        .tag-plan { background: rgba(245, 158, 11, 0.15); color: #f59e0b; }
+        
+        .project-desc {
             font-size: 13px;
             color: var(--text-sub);
             line-height: 1.6;
         }
 
-        .tag {
-            position: absolute;
-            top: 20px; right: 20px;
-            font-size: 11px;
-            padding: 4px 10px;
-            border-radius: 10px;
+        /* 底部操作大按钮 */
+        .action-btn {
+            display: block;
+            width: 100%;
+            margin-top: 30px;
+            padding: 18px;
+            border-radius: 16px;
             background: var(--primary);
             color: white;
-            font-weight: bold;
-        }
-
-        /* 登录大按钮 */
-        .btn-enter {
-            display: block;
             text-align: center;
-            padding: 22px;
-            margin-top: auto;
-            border-radius: 24px;
             text-decoration: none;
-            color: #fff;
-            font-weight: 900;
             font-size: 16px;
+            font-weight: 900;
             letter-spacing: 2px;
-            background: var(--primary);
-            box-shadow: 8px 8px 20px rgba(66, 133, 244, 0.35),
-                       -8px -8px 20px var(--shadow-light);
-            border: none;
-            outline: none;
-            cursor: pointer;
+            box-shadow: 6px 6px 15px rgba(74, 139, 220, 0.4),
+                       -6px -6px 15px var(--shadow-light);
+            transition: all 0.2s;
         }
-
-        .btn-enter:active {
+        .action-btn:active {
+            transform: scale(0.97);
+            box-shadow: inset 4px 4px 10px rgba(0,0,0,0.1);
             background: var(--primary-hover);
-            box-shadow: inset 4px 4px 10px rgba(0, 0, 0, 0.15);
-            transform: scale(0.98);
         }
 
-        /* 响应式排版 */
-        @media (max-width: 1400px) {
-            .dashboard { grid-template-columns: repeat(2, 1fr); display: flex; flex-direction: column; }
-            .profile { display: flex; flex-direction: row; text-align: left; gap: 40px; }
-            .avatar { margin: 0; width: 120px; height: 120px; font-size: 32px; }
+        /* ====== 完美响应式设计 (重点优化手机端) ====== */
+        @media (max-width: 1024px) {
+            .dashboard-container {
+                grid-template-columns: 1fr 1fr;
+            }
+            .profile-card { grid-row: span 1; grid-column: span 2; flex-direction: row; text-align: left; gap: 40px; }
+            .avatar-wrapper { margin-bottom: 0; }
             .status-list { margin-top: 0; }
         }
 
         @media (max-width: 768px) {
-            body { padding: 15px; }
-            .dashboard { padding: 20px; border-radius: 30px; gap: 25px; }
-            .profile { flex-direction: column; text-align: center; }
-            .panel { padding: 25px; border-radius: 24px; }
+            body { padding: 20px 15px; }
+            .dashboard-container {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+            .neo-card { padding: 25px 20px; border-radius: 24px; }
+            .neo-inset { padding: 20px 15px; }
+            .about-card, .profile-card { grid-column: span 1; }
+            .profile-card { flex-direction: column; text-align: center; gap: 15px; }
+            .avatar-wrapper { margin: 0 auto 10px; width: 120px; height: 120px; }
+            .avatar-img { width: 100px; height: 100px; }
+            .name { font-size: 24px; }
+            .section-title { font-size: 16px; }
+            .project-item { padding: 18px 15px; }
+            
+            /* 手机端适当缩减阴影大小，避免拥挤显得脏 */
+            .neo-card {
+                box-shadow: 12px 12px 24px var(--shadow-dark),
+                           -12px -12px 24px var(--shadow-light);
+            }
         }
     </style>
 </head>
 <body>
 
-    <div class="dashboard">
+    <div class="dashboard-container">
         
-        <div class="panel profile">
-            <div class="avatar"><span style="z-index: 10;">NKX</span></div>
+        <div class="neo-card profile-card delay-1">
+            <div class="avatar-wrapper">
+                <img src="https://img.i8-mc.cn/file/J0NJk8wH.jpeg" alt="Avatar" class="avatar-img">
+            </div>
             <div>
                 <h1 class="name">聂凯翔</h1>
-                <div class="role">独立开发者 / 运维老司机</div>
-                
-                <div class="inset-box status-list" style="padding: 15px 20px;">
-                    <div class="status-item"><i></i>福建 / 18岁 / 纯折腾党</div>
-                    <div class="status-item offline"><i></i>2026：死磕专升本与C1驾照</div>
-                    <div class="status-item"><i></i>blog.i8-mc.cn 正常运行中</div>
-                </div>
+                <div class="typewriter">独立开发者 / 运维工程师</div>
             </div>
-        </div>
-
-        <div class="panel about">
-            <div class="panel-title">Terminal Info</div>
-            <div class="inset-box">
-                <p>你好，我是 <strong>聂凯翔 (NKX / 聶.NET)</strong>。在这个充斥着 AI 生成代码的时代，我更喜欢手动敲打终端的声音。我不仅是个标准的00后，更是个在“MJJ”社区潜水多年的服务器“洋垃圾”抚养员。</p>
-                <p>我的日常除了在 <strong>Debian</strong> 系统里跑脚本，就是捣鼓实体硬件。无论是给 <strong>戴尔 R620</strong> 换硅脂，还是在超微主板上压榨 <strong>Proxmox VE (PVE)</strong> 虚拟化的极限，这些硬核的操作对我来说就是最悦耳的白噪音。</p>
-                <p>学习之余我也从不闲着：为了抢高贵的甲骨文(Oracle Cloud) ARM 机器，我手写了 Telegram 自动化监控 Bot；厌倦了臃肿的开源博客框架，我干脆自己造轮子，从零撸了一个极简且极客的 <strong>「NIE Blog System」</strong>。</p>
-                <p>未来的路还很长。拿下全日制本科文凭是我的近期主线，而更具野心的支线任务，是筹备创立我的 <strong>「福建苏辰网络科技」</strong>，在热爱的数据中心(IDC)领域，打下属于自己的一颗钉子。</p>
-            </div>
-        </div>
-
-        <div class="panel skills">
-            <div class="panel-title">Infrastructure Stack</div>
-            <div class="inset-box">
-                <div class="skill-item">
-                    <div class="skill-info"><span>Linux (Debian / RedHat)</span><span>95%</span></div>
-                    <div class="bar-bg"><div class="bar-fill" data-width="95%"></div></div>
-                </div>
-                <div class="skill-item">
-                    <div class="skill-info"><span>Proxmox VE 虚拟化架构</span><span>90%</span></div>
-                    <div class="bar-bg"><div class="bar-fill" data-width="90%"></div></div>
-                </div>
-                <div class="skill-item">
-                    <div class="skill-info"><span>Dell/Supermicro 硬件级维护</span><span>85%</span></div>
-                    <div class="bar-bg"><div class="bar-fill" data-width="85%"></div></div>
-                </div>
-                <div class="skill-item">
-                    <div class="skill-info"><span>TG Bot / 自动化部署</span><span>80%</span></div>
-                    <div class="bar-bg"><div class="bar-fill" data-width="80%"></div></div>
-                </div>
-            </div>
-        </div>
-
-        <div class="panel projects">
-            <div class="panel-title" style="margin-bottom: 5px;">Deployments & Milestone</div>
             
-            <a href="https://blog.i8-mc.cn" target="_blank" class="project-card">
-                <span class="tag">Active</span>
-                <h4>NIE Blog System (v1.3.4)</h4>
-                <p>抛弃臃肿框架，纯手工打造的极简博客系统，带代码高亮与 Markdown 渲染，持续客制化迭代中。</p>
-            </a>
+            <div class="neo-inset status-list">
+                <div class="status-item"><div class="status-dot info"></div>📍 福建 · 18岁技术折腾党</div>
+                <div class="status-item"><div class="status-dot warn"></div>🎓 2026届 · 备战专升本 & C1驾照</div>
+                <div class="status-item"><div class="status-dot"></div>🟢 主干系统运行中 (blog.i8-mc.cn)</div>
+            </div>
+        </div>
 
-            <div class="project-card" style="cursor: default;">
-                <span class="tag" style="background:#f59e0b;">Planned</span>
-                <h4>福建苏辰网络科技有限公司</h4>
-                <p>正在筹划中的创业项目，主攻 IDC 基础架构规划、企业级反向代理与网络分发测试。</p>
+        <div class="neo-card about-card delay-2">
+            <h2 class="section-title">终端履历</h2>
+            <div class="neo-inset about-text">
+                <p>你好，我是聂凯翔（NKX）。与单纯敲击代码相比，我更痴迷于冰冷硬件与终端字符交织出的美感。日常的乐趣在于游走于 <strong>戴尔R620</strong> 与 <strong>超微主板</strong> 之间，探寻 <strong>Proxmox VE (PVE)</strong> 底层虚拟化集群的性能极限。</p>
+                <p>在折腾的道路上，为了抢占高贵的甲骨文(Oracle Cloud) ARM实例，我手撸了 Telegram 并发监控机器人；为了追求最纯粹的极客写作体验，我抛弃了臃肿的框架，独立重构了 <strong>「NIE Blog」</strong> 博客系统。</p>
+                <p>前路方长，眼下的主线任务是拿下本科学历。而更具野心的支线任务，是筹备创立我的 <strong>「福建苏辰网络科技」</strong>，在热爱的数据中心(IDC)与网络架构领域，打下属于自己的一颗钉子。</p>
+            </div>
+        </div>
+
+        <div class="neo-card delay-3">
+            <h2 class="section-title">底层技术栈</h2>
+            <div class="skill-group">
+                <div class="skill-item">
+                    <div class="skill-name"><span>Linux 架构 (Debian/RHEL)</span><span>95%</span></div>
+                    <div class="bar-out"><div class="bar-in" data-width="95%"></div></div>
+                </div>
+                <div class="skill-item">
+                    <div class="skill-name"><span>Proxmox VE 虚拟化运维</span><span>90%</span></div>
+                    <div class="bar-out"><div class="bar-in" data-width="90%"></div></div>
+                </div>
+                <div class="skill-item">
+                    <div class="skill-name"><span>硬件管理 (Dell/Supermicro)</span><span>85%</span></div>
+                    <div class="bar-out"><div class="bar-in" data-width="85%"></div></div>
+                </div>
+                <div class="skill-item">
+                    <div class="skill-name"><span>TG Bot / 自动化脚本开发</span><span>80%</span></div>
+                    <div class="bar-out"><div class="bar-in" data-width="80%"></div></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="neo-card delay-4">
+            <h2 class="section-title">项目与部署</h2>
+            <div class="project-list">
+                
+                <a href="https://blog.i8-mc.cn" target="_blank" class="project-item">
+                    <div class="project-header">
+                        <span class="project-title">NIE Blog System (v1.3.4)</span>
+                        <span class="tag tag-active">活跃迭代</span>
+                    </div>
+                    <div class="project-desc">纯手工打造的极简博客系统，舍弃臃肿框架，深度定制 UI 与 Markdown 渲染引擎。</div>
+                </a>
+
+                <div class="project-item" style="cursor: default;">
+                    <div class="project-header">
+                        <span class="project-title">Oracle ARM 自动化 Bot</span>
+                        <span class="tag tag-run">平稳运行</span>
+                    </div>
+                    <div class="project-desc">自部署于服务器底层的 Telegram 机器人，实现高并发云资源的自动抢占与全天候监控。</div>
+                </div>
+
+                <div class="project-item" style="cursor: default;">
+                    <div class="project-header">
+                        <span class="project-title">福建苏辰网络科技</span>
+                        <span class="tag tag-plan">部署筹划</span>
+                    </div>
+                    <div class="project-desc">创业孵化项目。主攻企业级反向代理、边缘节点分发与高可用网络架构规划。</div>
+                </div>
+
             </div>
 
-            <div class="project-card" style="cursor: default;">
-                <span class="tag" style="background:#10b981;">Deployed</span>
-                <h4>Oracle ARM Instance Bot</h4>
-                <p>蹲守凤凰城节点的利器，自部署于服务器的 Telegram Bot，实现高并发资源自动获取与监控。</p>
-            </div>
-
-            <a href="https://blog.i8-mc.cn" class="btn-enter">ENTER SYSTEM -></a>
+            <a href="https://blog.i8-mc.cn" class="action-btn">载入主干网络 -></a>
         </div>
 
     </div>
 
     <script>
-        // 丝滑进度条动画装载
-        window.onload = () => {
+        // 核心亮点：丝滑的进度条加载动画
+        // 页面结构完全加载后，触发进度条的宽度延伸，提升视觉质感
+        document.addEventListener("DOMContentLoaded", () => {
             setTimeout(() => {
-                document.querySelectorAll('.bar-fill').forEach(bar => {
+                const progressBars = document.querySelectorAll('.bar-in');
+                progressBars.forEach(bar => {
                     const targetWidth = bar.getAttribute('data-width');
                     bar.style.width = targetWidth;
                 });
-            }, 300); 
-        };
+            }, 500); // 略微延迟，等待外层卡片浮现动画完成
+        });
     </script>
 </body>
 </html>
